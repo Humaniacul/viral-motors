@@ -60,8 +60,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/images/vm-logo.png" />
+        <link rel="apple-touch-icon" href="/images/vm-logo.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1a1a1a" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -77,7 +77,7 @@ export default function RootLayout({
               "url": "https://viralmotors.com",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://viralmotors.com/logo.png"
+                "url": "https://viralmotors.com/images/vm-logo.png"
               },
               "description": "Premier automotive news and reviews platform",
               "sameAs": [

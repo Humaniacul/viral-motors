@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Facebook, Twitter, Instagram, Youtube, Mail, MapPin, Phone, Send, Heart, ExternalLink } from 'lucide-react'
 
 const Footer = () => {
@@ -163,13 +164,21 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 mb-6">
-              <div className="w-12 h-12 bg-primary-red rounded-xl flex items-center justify-center">
-                <span className="text-white font-black text-xl">VM</span>
-              </div>
-              <span className="text-2xl font-black">
-                Viral Motors
-              </span>
+            <Link href="/" className="flex items-center space-x-3 mb-6 group">
+              <Image
+                src="/images/vm-logo.png"
+                alt="Viral Motors"
+                width={48}
+                height={48}
+                className="transition-transform duration-200 group-hover:scale-105"
+              />
+              <Image
+                src="/images/viral-motors-text.png"
+                alt="Viral Motors"
+                width={160}
+                height={36}
+                className="transition-opacity duration-200 group-hover:opacity-80"
+              />
             </Link>
 
             {/* Description */}

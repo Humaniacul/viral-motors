@@ -74,13 +74,21 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 bg-primary-red rounded-lg flex items-center justify-center group-hover:bg-primary-red-light transition-colors duration-200">
-              <span className="text-white font-black text-xl">VM</span>
-            </div>
-            <span className="text-xl font-bold text-dark-text group-hover:text-primary-red transition-colors duration-200">
-              Viral Motors
-            </span>
+          <Link href="/" className="flex items-center space-x-3 group">
+            <Image
+              src="/images/vm-logo.png"
+              alt="Viral Motors"
+              width={40}
+              height={40}
+              className="transition-transform duration-200 group-hover:scale-105"
+            />
+            <Image
+              src="/images/viral-motors-text.png"
+              alt="Viral Motors"
+              width={140}
+              height={32}
+              className="transition-opacity duration-200 group-hover:opacity-80"
+            />
           </Link>
 
           {/* Desktop Navigation */}
