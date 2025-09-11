@@ -168,8 +168,8 @@ const Footer = () => {
               <Image
                 src="/images/vm-logo.png"
                 alt="Viral Motors"
-                width={48}
-                height={48}
+                width={64}
+                height={64}
                 className="transition-transform duration-200 group-hover:scale-105"
               />
               <Image

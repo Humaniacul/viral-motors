@@ -78,8 +78,8 @@ const Navbar = () => {
             <Image
               src="/images/vm-logo.png"
               alt="Viral Motors"
-              width={40}
-              height={40}
+              width={56}
+              height={56}
               className="transition-transform duration-200 group-hover:scale-105"
             />
             <Image
