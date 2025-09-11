@@ -82,9 +82,9 @@ const Hero = () => {
   const currentArticle = featuredArticles[currentSlide]
 
   return (
-    <section className="relative">
+    <section className="relative pt-16 lg:pt-20">
       {/* Mobile-First Hero Container */}
-      <div className="relative h-[70vh] sm:h-[80vh] lg:h-screen min-h-[500px] max-h-[900px] overflow-hidden">
+      <div className="relative h-[60vh] sm:h-[70vh] lg:h-[80vh] min-h-[400px] max-h-[700px] overflow-hidden">
         {/* Background Images */}
         <div className="absolute inset-0">
           {featuredArticles.map((article, index) => (
@@ -113,10 +113,10 @@ const Hero = () => {
                   alt={article.title}
                   fill
                   priority={index === 0}
-                  className="object-cover object-center scale-110"
+                  className="object-cover object-center scale-105"
                   sizes="100vw"
                   style={{
-                    objectPosition: 'center 30%'
+                    objectPosition: 'center 40%'
                   }}
                 />
               </div>
@@ -133,9 +133,9 @@ const Hero = () => {
       </div>
 
       {/* Content - Positioned Absolutely for Better Mobile Control */}
-      <div className="absolute inset-0 z-10 flex items-end sm:items-center">
+      <div className="absolute inset-0 z-10 flex items-center sm:items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-3xl pb-8 sm:pb-0">
+          <div className="max-w-3xl">
             {/* Category Badge */}
             <div className="inline-flex items-center mb-3 sm:mb-4">
               <span className="bg-primary-red/95 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wide shadow-lg">
