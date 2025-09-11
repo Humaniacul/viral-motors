@@ -82,91 +82,115 @@ const Hero = () => {
   const currentArticle = featuredArticles[currentSlide]
 
   return (
-    <section className="relative h-screen min-h-[600px] overflow-hidden">
-      {/* Background Images */}
-      <div className="absolute inset-0">
-        {featuredArticles.map((article, index) => (
-          <div
-            key={article.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Image
-              src={article.image}
-              alt={article.title}
-              fill
-              priority={index === 0}
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
-        ))}
-        
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+    <section className="relative">
+      {/* Mobile-First Hero Container */}
+      <div className="relative h-[70vh] sm:h-[80vh] lg:h-screen min-h-[500px] max-h-[900px] overflow-hidden">
+        {/* Background Images */}
+        <div className="absolute inset-0">
+          {featuredArticles.map((article, index) => (
+            <div
+              key={article.id}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              {/* Desktop Image */}
+              <div className="hidden sm:block absolute inset-0">
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  fill
+                  priority={index === 0}
+                  className="object-cover object-center"
+                  sizes="100vw"
+                />
+              </div>
+              
+              {/* Mobile Image with Better Aspect Ratio */}
+              <div className="sm:hidden absolute inset-0">
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  fill
+                  priority={index === 0}
+                  className="object-cover object-center scale-110"
+                  sizes="100vw"
+                  style={{
+                    objectPosition: 'center 30%'
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+          
+          {/* Enhanced Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent sm:from-black/70 sm:via-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+          
+          {/* Mobile-specific bottom gradient for better text readability */}
+          <div className="sm:hidden absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent"></div>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 h-full flex items-center">
+      {/* Content - Positioned Absolutely for Better Mobile Control */}
+      <div className="absolute inset-0 z-10 flex items-end sm:items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl pb-8 sm:pb-0">
             {/* Category Badge */}
-            <div className="inline-flex items-center mb-4">
-              <span className="bg-primary-red/90 text-white px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide">
+            <div className="inline-flex items-center mb-3 sm:mb-4">
+              <span className="bg-primary-red/95 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wide shadow-lg">
                 {currentArticle.category}
               </span>
               {currentArticle.isVideo && (
-                <div className="ml-3 flex items-center text-white/80">
-                  <Play size={16} className="mr-1" />
-                  <span className="text-sm">Video</span>
+                <div className="ml-2 sm:ml-3 flex items-center text-white/90">
+                  <Play size={14} className="mr-1 sm:mr-1" />
+                  <span className="text-xs sm:text-sm">Video</span>
                 </div>
               )}
             </div>
 
-            {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight animate-fadeIn">
+            {/* Title - Responsive Sizing */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white mb-4 sm:mb-6 leading-tight animate-fadeIn">
               {currentArticle.title}
             </h1>
 
-            {/* Excerpt */}
-            <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed animate-slideUp">
+            {/* Excerpt - Hidden on Small Mobile for Space */}
+            <p className="hidden xs:block text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 leading-relaxed animate-slideUp">
               {currentArticle.excerpt}
             </p>
 
-            {/* Meta Information */}
-            <div className="flex flex-wrap items-center gap-6 mb-8 text-white/80">
+            {/* Meta Information - Compact on Mobile */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6 mb-6 sm:mb-8 text-white/80 text-sm">
               <div className="flex items-center">
-                <User size={16} className="mr-2" />
-                <span className="text-sm font-medium">{currentArticle.author}</span>
+                <User size={14} className="mr-1.5" />
+                <span className="font-medium">{currentArticle.author}</span>
               </div>
               <div className="flex items-center">
-                <Clock size={16} className="mr-2" />
-                <span className="text-sm">{currentArticle.readTime} read</span>
+                <Clock size={14} className="mr-1.5" />
+                <span>{currentArticle.readTime} read</span>
               </div>
-              <div className="text-sm">
+              <div className="hidden sm:block">
                 {formatDate(currentArticle.publishedAt)}
               </div>
             </div>
 
-            {/* CTA Button */}
+            {/* CTA Button - Mobile Optimized */}
             <Link
               href={`/articles/${currentArticle.slug}`}
-              className="inline-flex items-center bg-primary-red hover:bg-primary-red-light text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 hover:shadow-glow group"
+              className="inline-flex items-center bg-primary-red hover:bg-primary-red-light text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-200 hover:shadow-glow group shadow-lg"
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
             >
               Read Full Story
-              <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+              <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-200" />
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex space-x-3">
+      {/* Slide Indicators - Mobile Optimized */}
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex space-x-2 sm:space-x-3">
           {featuredArticles.map((_, index) => (
             <button
               key={index}
@@ -175,7 +199,7 @@ const Hero = () => {
                 setIsAutoPlaying(false)
                 setTimeout(() => setIsAutoPlaying(true), 3000)
               }}
-              className={`w-12 h-1 rounded-full transition-all duration-300 ${
+              className={`w-8 sm:w-12 h-1 rounded-full transition-all duration-300 ${
                 index === currentSlide
                   ? 'bg-primary-red shadow-glow'
                   : 'bg-white/30 hover:bg-white/50'
@@ -186,29 +210,29 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-20">
+      {/* Navigation Arrows - Hidden on Mobile for Cleaner Look */}
+      <div className="hidden sm:block absolute top-1/2 left-4 transform -translate-y-1/2 z-20">
         <button
           onClick={() => {
             setCurrentSlide(prev => prev === 0 ? featuredArticles.length - 1 : prev - 1)
             setIsAutoPlaying(false)
             setTimeout(() => setIsAutoPlaying(true), 3000)
           }}
-          className="w-12 h-12 bg-black/30 hover:bg-primary-red/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+          className="w-12 h-12 bg-black/30 hover:bg-primary-red/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 backdrop-blur-sm"
           aria-label="Previous slide"
         >
           <ArrowRight size={20} className="rotate-180" />
         </button>
       </div>
       
-      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
+      <div className="hidden sm:block absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
         <button
           onClick={() => {
             setCurrentSlide(prev => (prev + 1) % featuredArticles.length)
             setIsAutoPlaying(false)
             setTimeout(() => setIsAutoPlaying(true), 3000)
           }}
-          className="w-12 h-12 bg-black/30 hover:bg-primary-red/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+          className="w-12 h-12 bg-black/30 hover:bg-primary-red/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 backdrop-blur-sm"
           aria-label="Next slide"
         >
           <ArrowRight size={20} />
