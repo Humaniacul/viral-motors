@@ -19,6 +19,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [isAnimating, setIsAnimating] = useState(false)
 
   const { signIn, signUp, signInWithProvider } = useAuth()
 
@@ -41,29 +42,38 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
       // Store the scroll position for restoration
       ;(document.body as any).__scrollY = scrollY
       
+      // Trigger entrance animation
+      setIsAnimating(true)
+      
       setMode(initialMode)
       setError('')
       setSuccess('')
     } else {
-      // Remove CSS classes
-      document.body.classList.remove('modal-open')
-      document.documentElement.classList.remove('modal-open')
+      // Start exit animation
+      setIsAnimating(false)
       
-      // Get stored scroll position
-      const scrollY = (document.body as any).__scrollY || 0
-      
-      // Restore body styles
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
-      document.body.style.overflow = ''
-      document.documentElement.style.overflow = ''
-      
-      // Restore scroll position
-      window.scrollTo(0, scrollY)
-      
-      // Clean up stored scroll position
-      delete (document.body as any).__scrollY
+      // Delay cleanup to allow exit animation
+      setTimeout(() => {
+        // Remove CSS classes
+        document.body.classList.remove('modal-open')
+        document.documentElement.classList.remove('modal-open')
+        
+        // Get stored scroll position
+        const scrollY = (document.body as any).__scrollY || 0
+        
+        // Restore body styles
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        document.body.style.overflow = ''
+        document.documentElement.style.overflow = ''
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollY)
+        
+        // Clean up stored scroll position
+        delete (document.body as any).__scrollY
+      }, 300) // Match transition duration
       
       setEmail('')
       setPassword('')
@@ -145,13 +155,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
     <div className="fixed inset-0 z-[9999] overflow-hidden modal-overlay">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
+        className={`fixed inset-0 bg-black/80 backdrop-blur-sm ${isAnimating ? 'backdrop-enter' : 'backdrop-exit'}`}
         onClick={onClose}
       />
       
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4 overflow-y-auto modal-content">
-        <div className="relative w-full max-w-md transform transition-all duration-300 scale-100 opacity-100 z-[10000]">
+        <div className={`relative w-full max-w-md z-[10000] ${isAnimating ? 'modal-enter' : 'modal-exit'}`}>
           <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
             {/* Close Button */}
             <button
