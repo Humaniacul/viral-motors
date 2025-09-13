@@ -101,7 +101,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   if (!isOpen) return null
 
   const modalContent = (
-    <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
+    <div className="bg-dark-bg/95 backdrop-blur-md border-t border-gray-700 shadow-2xl overflow-hidden">
             {/* Close Button */}
             <button
               onClick={onClose}
@@ -112,22 +112,17 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
             </button>
 
             {/* Header */}
-            <div className="relative bg-gradient-to-br from-primary-red to-primary-red-light p-8 text-white">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='7' cy='7' r='7'/%3E%3Ccircle cx='53' cy='7' r='7'/%3E%3Ccircle cx='7' cy='53' r='7'/%3E%3Ccircle cx='53' cy='53' r='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-                }} />
-              </div>
+            <div className="relative bg-dark-bg/95 backdrop-blur-md p-6 lg:p-8 text-white border-b border-gray-700">
               
               <div className="relative text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User size={32} />
+                <div className="w-12 h-12 lg:w-16 lg:h-16 bg-primary-red/20 rounded-full flex items-center justify-center mx-auto mb-3 lg:mb-4">
+                  <User size={24} className="lg:hidden" />
+                  <User size={32} className="hidden lg:block" />
                 </div>
-                <h2 className="text-2xl font-black mb-2">
+                <h2 className="text-xl lg:text-2xl font-black mb-2">
                   {mode === 'signin' ? 'Welcome Back' : 'Join Viral Motors'}
                 </h2>
-                <p className="text-white/90 text-sm">
+                <p className="text-white/90 text-xs lg:text-sm">
                   {mode === 'signin' 
                     ? 'Sign in to access your personalized automotive experience'
                     : 'Create your account and join the automotive community'
@@ -137,7 +132,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
             </div>
 
             {/* Content */}
-            <div className="p-8">
+            <div className="p-6 lg:p-8 bg-dark-bg/95 backdrop-blur-md">
               {success ? (
                 // Success State
                 <div className="text-center">
