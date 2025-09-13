@@ -307,7 +307,6 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
                 </>
               )}
             </div>
-          </div>
     </div>
   )
 
