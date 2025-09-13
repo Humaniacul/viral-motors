@@ -24,12 +24,27 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   useEffect(() => {
     if (isOpen) {
+      // Prevent scrolling on body and html
       document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      // Also prevent scrolling on the main container
+      const mainContainer = document.querySelector('main, .min-h-screen')
+      if (mainContainer) {
+        (mainContainer as HTMLElement).style.overflow = 'hidden'
+      }
+      
       setMode(initialMode)
       setError('')
       setSuccess('')
     } else {
+      // Restore scrolling
       document.body.style.overflow = 'unset'
+      document.documentElement.style.overflow = 'unset'
+      const mainContainer = document.querySelector('main, .min-h-screen')
+      if (mainContainer) {
+        (mainContainer as HTMLElement).style.overflow = 'unset'
+      }
+      
       setEmail('')
       setPassword('')
       setFullName('')
@@ -37,7 +52,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
     }
 
     return () => {
+      // Cleanup: always restore scrolling when component unmounts
       document.body.style.overflow = 'unset'
+      document.documentElement.style.overflow = 'unset'
+      const mainContainer = document.querySelector('main, .min-h-screen')
+      if (mainContainer) {
+        (mainContainer as HTMLElement).style.overflow = 'unset'
+      }
     }
   }, [isOpen, initialMode])
 
@@ -94,7 +115,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-[9999] overflow-hidden">
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
@@ -102,13 +123,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
       />
       
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative w-full max-w-md transform transition-all duration-300 scale-100 opacity-100">
+      <div className="flex min-h-full items-center justify-center p-4 overflow-y-auto">
+        <div className="relative w-full max-w-md transform transition-all duration-300 scale-100 opacity-100 z-[10000]">
           <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-10 w-8 h-8 bg-gray-800/80 hover:bg-primary-red/80 text-white rounded-full flex items-center justify-center transition-all duration-200"
+              className="absolute top-4 right-4 z-[10001] w-8 h-8 bg-gray-800/80 hover:bg-primary-red/80 text-white rounded-full flex items-center justify-center transition-all duration-200"
               aria-label="Close modal"
             >
               <X size={18} />
