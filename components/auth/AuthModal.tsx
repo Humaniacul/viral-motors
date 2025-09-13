@@ -151,18 +151,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   if (!isOpen) return null
 
-  return (
-    <div className="fixed inset-0 z-[9999] overflow-hidden modal-overlay">
-      {/* Backdrop */}
-      <div 
-        className={`fixed inset-0 bg-black/80 backdrop-blur-sm ${isAnimating ? 'backdrop-enter' : 'backdrop-exit'}`}
-        onClick={onClose}
-      />
-      
-      {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4 overflow-y-auto modal-content">
-        <div className={`relative w-full max-w-md z-[10000] ${isAnimating ? 'modal-enter' : 'modal-exit'}`}>
-          <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
+  const modalContent = (
+    <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
             {/* Close Button */}
             <button
               onClick={onClose}
@@ -369,9 +359,33 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
               )}
             </div>
           </div>
+    </div>
+  )
+
+  return (
+    <>
+      {/* Mobile: Full screen backdrop */}
+      <div className="lg:hidden fixed inset-0 z-[9999] overflow-hidden modal-overlay">
+        <div 
+          className={`fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}
+          onClick={onClose}
+        />
+        
+        {/* Mobile Modal - slide down from top */}
+        <div className="flex min-h-full items-start justify-center pt-8 p-4 overflow-y-auto modal-content">
+          <div className={`relative w-full max-w-md z-[10000] transition-transform duration-300 ${isAnimating ? 'translate-y-0' : '-translate-y-8 opacity-0'}`}>
+            {modalContent}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Desktop: Dropdown from navbar */}
+      <div className="hidden lg:block fixed top-16 right-6 z-[9999]">
+        <div className={`w-96 z-[10000] transition-all duration-300 origin-top ${isAnimating ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
+          {modalContent}
+        </div>
+      </div>
+    </>
   )
 }
 

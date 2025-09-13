@@ -177,68 +177,35 @@ body.modal-open .modal-content {
   position: relative !important;
 }
 
-/* Modal entrance animations */
-@keyframes modalEnter {
+/* Simple modal animations - slide down from top */
+@keyframes mobileSlideDown {
   0% {
     opacity: 0;
-    transform: scale(0.95) translateY(8px);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.02) translateY(-2px);
+    transform: translateY(-20px);
   }
   100% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
 }
 
-@keyframes modalExit {
-  0% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.95) translateY(8px);
-  }
-}
-
-@keyframes backdropEnter {
+@keyframes desktopDropdown {
   0% {
     opacity: 0;
-    backdrop-filter: blur(0px);
+    transform: scaleY(0);
   }
   100% {
     opacity: 1;
-    backdrop-filter: blur(4px);
+    transform: scaleY(1);
   }
 }
 
-@keyframes backdropExit {
-  0% {
-    opacity: 1;
-    backdrop-filter: blur(4px);
-  }
-  100% {
-    opacity: 0;
-    backdrop-filter: blur(0px);
-  }
+/* Apply simple slide animations */
+.mobile-slide-enter {
+  animation: mobileSlideDown 0.3s ease-out forwards;
 }
 
-/* Apply animations to modal elements */
-.modal-enter {
-  animation: modalEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.modal-exit {
-  animation: modalExit 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.backdrop-enter {
-  animation: backdropEnter 0.3s ease-out forwards;
-}
-
-.backdrop-exit {
-  animation: backdropExit 0.3s ease-in forwards;
+.desktop-dropdown-enter {
+  animation: desktopDropdown 0.3s ease-out forwards;
+  transform-origin: top;
 }
