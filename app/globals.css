@@ -177,35 +177,34 @@ body.modal-open .modal-content {
   position: relative !important;
 }
 
-/* Simple modal animations - slide down from top */
-@keyframes mobileSlideDown {
-  0% {
+/* Clean slide animations */
+@keyframes slide-down {
+  from {
     opacity: 0;
     transform: translateY(-20px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes desktopDropdown {
-  0% {
+@keyframes dropdown {
+  from {
     opacity: 0;
     transform: scaleY(0);
   }
-  100% {
+  to {
     opacity: 1;
     transform: scaleY(1);
   }
 }
 
-/* Apply simple slide animations */
-.mobile-slide-enter {
-  animation: mobileSlideDown 0.3s ease-out forwards;
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out;
 }
 
-.desktop-dropdown-enter {
-  animation: desktopDropdown 0.3s ease-out forwards;
+.animate-dropdown {
+  animation: dropdown 0.3s ease-out;
   transform-origin: top;
 }

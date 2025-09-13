@@ -19,61 +19,23 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [isAnimating, setIsAnimating] = useState(false)
 
   const { signIn, signUp, signInWithProvider } = useAuth()
 
   useEffect(() => {
     if (isOpen) {
-      // Store current scroll position
-      const scrollY = window.pageYOffset || document.documentElement.scrollTop
-      
-      // Add CSS class to body for comprehensive scroll prevention
-      document.body.classList.add('modal-open')
-      document.documentElement.classList.add('modal-open')
-      
-      // Store scroll position and apply styles
-      document.body.style.top = `-${scrollY}px`
-      document.body.style.position = 'fixed'
-      document.body.style.width = '100%'
-      document.body.style.overflow = 'hidden'
-      document.documentElement.style.overflow = 'hidden'
-      
-      // Store the scroll position for restoration
-      ;(document.body as any).__scrollY = scrollY
-      
-      // Trigger entrance animation
-      setIsAnimating(true)
+      // Only prevent scroll on mobile (full screen modal)
+      const isMobile = window.innerWidth < 1024
+      if (isMobile) {
+        document.body.style.overflow = 'hidden'
+      }
       
       setMode(initialMode)
       setError('')
       setSuccess('')
     } else {
-      // Start exit animation
-      setIsAnimating(false)
-      
-      // Delay cleanup to allow exit animation
-      setTimeout(() => {
-        // Remove CSS classes
-        document.body.classList.remove('modal-open')
-        document.documentElement.classList.remove('modal-open')
-        
-        // Get stored scroll position
-        const scrollY = (document.body as any).__scrollY || 0
-        
-        // Restore body styles
-        document.body.style.position = ''
-        document.body.style.top = ''
-        document.body.style.width = ''
-        document.body.style.overflow = ''
-        document.documentElement.style.overflow = ''
-        
-        // Restore scroll position
-        window.scrollTo(0, scrollY)
-        
-        // Clean up stored scroll position
-        delete (document.body as any).__scrollY
-      }, 300) // Match transition duration
+      // Restore scroll
+      document.body.style.overflow = ''
       
       setEmail('')
       setPassword('')
@@ -82,20 +44,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
     }
 
     return () => {
-      // Cleanup: always restore scrolling when component unmounts
-      document.body.classList.remove('modal-open')
-      document.documentElement.classList.remove('modal-open')
-      
-      const scrollY = (document.body as any).__scrollY || 0
-      
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
       document.body.style.overflow = ''
-      document.documentElement.style.overflow = ''
-      
-      window.scrollTo(0, scrollY)
-      delete (document.body as any).__scrollY
     }
   }, [isOpen, initialMode])
 
@@ -364,26 +313,23 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   return (
     <>
-      {/* Mobile: Full screen backdrop */}
-      <div className="lg:hidden fixed inset-0 z-[9999] overflow-hidden modal-overlay">
+      {/* Mobile: Full screen modal */}
+      <div className="lg:hidden fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm">
         <div 
-          className={`fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}
+          className="absolute inset-0"
           onClick={onClose}
         />
         
-        {/* Mobile Modal - slide down from top */}
-        <div className="flex min-h-full items-start justify-center pt-8 p-4 overflow-y-auto modal-content">
-          <div className={`relative w-full max-w-md z-[10000] transition-transform duration-300 ${isAnimating ? 'translate-y-0' : '-translate-y-8 opacity-0'}`}>
+        <div className="flex min-h-full items-start justify-center pt-8 p-4 overflow-y-auto">
+          <div className="relative w-full max-w-md z-10 animate-slide-down">
             {modalContent}
           </div>
         </div>
       </div>
 
-      {/* Desktop: Dropdown from navbar */}
-      <div className="hidden lg:block fixed top-16 right-6 z-[9999]">
-        <div className={`w-96 z-[10000] transition-all duration-300 origin-top ${isAnimating ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
-          {modalContent}
-        </div>
+      {/* Desktop: Simple dropdown from navbar */}
+      <div className="hidden lg:block fixed top-16 right-6 z-[9999] w-96 animate-dropdown">
+        {modalContent}
       </div>
     </>
   )
