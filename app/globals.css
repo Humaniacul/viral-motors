@@ -176,35 +176,3 @@ body.modal-open .modal-content {
   overflow: auto !important;
   position: relative !important;
 }
-
-/* Clean slide animations */
-@keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes dropdown {
-  from {
-    opacity: 0;
-    transform: scaleY(0);
-  }
-  to {
-    opacity: 1;
-    transform: scaleY(1);
-  }
-}
-
-.animate-slide-down {
-  animation: slide-down 0.3s ease-out;
-}
-
-.animate-dropdown {
-  animation: dropdown 0.3s ease-out;
-  transform-origin: top;
-}

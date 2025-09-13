@@ -24,18 +24,46 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   useEffect(() => {
     if (isOpen) {
-      // Only prevent scroll on mobile (full screen modal)
-      const isMobile = window.innerWidth < 1024
-      if (isMobile) {
-        document.body.style.overflow = 'hidden'
-      }
+      // Store current scroll position
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop
+      
+      // Add CSS class to body for comprehensive scroll prevention
+      document.body.classList.add('modal-open')
+      document.documentElement.classList.add('modal-open')
+      
+      // Store scroll position and apply styles
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      
+      // Store the scroll position for restoration
+      ;(document.body as any).__scrollY = scrollY
       
       setMode(initialMode)
       setError('')
       setSuccess('')
     } else {
-      // Restore scroll
+      // Remove CSS classes
+      document.body.classList.remove('modal-open')
+      document.documentElement.classList.remove('modal-open')
+      
+      // Get stored scroll position
+      const scrollY = (document.body as any).__scrollY || 0
+      
+      // Restore body styles
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
       document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+      
+      // Restore scroll position
+      window.scrollTo(0, scrollY)
+      
+      // Clean up stored scroll position
+      delete (document.body as any).__scrollY
       
       setEmail('')
       setPassword('')
@@ -44,7 +72,20 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
     }
 
     return () => {
+      // Cleanup: always restore scrolling when component unmounts
+      document.body.classList.remove('modal-open')
+      document.documentElement.classList.remove('modal-open')
+      
+      const scrollY = (document.body as any).__scrollY || 0
+      
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
       document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+      
+      window.scrollTo(0, scrollY)
+      delete (document.body as any).__scrollY
     }
   }, [isOpen, initialMode])
 
@@ -100,8 +141,18 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   if (!isOpen) return null
 
-  const modalContent = (
-    <div className="bg-dark-bg/95 backdrop-blur-md border-t border-gray-700 shadow-2xl overflow-hidden">
+  return (
+    <div className="fixed inset-0 z-[9999] overflow-hidden modal-overlay">
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
+        onClick={onClose}
+      />
+      
+      {/* Modal */}
+      <div className="flex min-h-full items-center justify-center p-4 overflow-y-auto modal-content">
+        <div className="relative w-full max-w-md transform transition-all duration-300 scale-100 opacity-100 z-[10000]">
+          <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
             {/* Close Button */}
             <button
               onClick={onClose}
@@ -112,17 +163,22 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
             </button>
 
             {/* Header */}
-            <div className="relative bg-dark-bg/95 backdrop-blur-md p-6 lg:p-8 text-white border-b border-gray-700">
+            <div className="relative bg-gradient-to-br from-primary-red to-primary-red-light p-8 text-white">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='7' cy='7' r='7'/%3E%3Ccircle cx='53' cy='7' r='7'/%3E%3Ccircle cx='7' cy='53' r='7'/%3E%3Ccircle cx='53' cy='53' r='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+                }} />
+              </div>
               
               <div className="relative text-center">
-                <div className="w-12 h-12 lg:w-16 lg:h-16 bg-primary-red/20 rounded-full flex items-center justify-center mx-auto mb-3 lg:mb-4">
-                  <User size={24} className="lg:hidden" />
-                  <User size={32} className="hidden lg:block" />
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <User size={32} />
                 </div>
-                <h2 className="text-xl lg:text-2xl font-black mb-2">
+                <h2 className="text-2xl font-black mb-2">
                   {mode === 'signin' ? 'Welcome Back' : 'Join Viral Motors'}
                 </h2>
-                <p className="text-white/90 text-xs lg:text-sm">
+                <p className="text-white/90 text-sm">
                   {mode === 'signin' 
                     ? 'Sign in to access your personalized automotive experience'
                     : 'Create your account and join the automotive community'
@@ -132,7 +188,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
             </div>
 
             {/* Content */}
-            <div className="p-6 lg:p-8 bg-dark-bg/95 backdrop-blur-md">
+            <div className="p-8">
               {success ? (
                 // Success State
                 <div className="text-center">
@@ -302,30 +358,10 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
                 </>
               )}
             </div>
-    </div>
-  )
-
-  return (
-    <>
-      {/* Mobile: Full screen modal */}
-      <div className="lg:hidden fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm">
-        <div 
-          className="absolute inset-0"
-          onClick={onClose}
-        />
-        
-        <div className="flex min-h-full items-start justify-center pt-8 p-4 overflow-y-auto">
-          <div className="relative w-full max-w-md z-10 animate-slide-down">
-            {modalContent}
           </div>
         </div>
       </div>
-
-      {/* Desktop: Simple dropdown from navbar */}
-      <div className="hidden lg:block fixed top-16 right-6 z-[9999] w-96 animate-dropdown">
-        {modalContent}
-      </div>
-    </>
+    </div>
   )
 }
 
