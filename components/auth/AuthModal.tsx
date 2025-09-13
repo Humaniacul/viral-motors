@@ -24,53 +24,46 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   useEffect(() => {
     if (isOpen) {
+      // Store current scroll position
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop
+      
       // Add CSS class to body for comprehensive scroll prevention
       document.body.classList.add('modal-open')
+      document.documentElement.classList.add('modal-open')
       
-      // Store original overflow values
-      const originalBodyOverflow = document.body.style.overflow
-      const originalHtmlOverflow = document.documentElement.style.overflow
-      
-      // Prevent scrolling on body and html
+      // Store scroll position and apply styles
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
       
-      // Also prevent scrolling on all possible scrollable containers
-      const scrollableContainers = document.querySelectorAll('main, .min-h-screen, #__next, [data-scroll-container]')
-      const originalOverflows: { element: HTMLElement; overflow: string }[] = []
-      
-      scrollableContainers.forEach(container => {
-        const element = container as HTMLElement
-        originalOverflows.push({ element, overflow: element.style.overflow })
-        element.style.overflow = 'hidden'
-      })
-      
-      // Store original values for cleanup
-      ;(document.body as any).__originalOverflow = originalBodyOverflow
-      ;(document.documentElement as any).__originalOverflow = originalHtmlOverflow
-      ;(document.body as any).__originalContainerOverflows = originalOverflows
+      // Store the scroll position for restoration
+      ;(document.body as any).__scrollY = scrollY
       
       setMode(initialMode)
       setError('')
       setSuccess('')
     } else {
-      // Remove CSS class from body
+      // Remove CSS classes
       document.body.classList.remove('modal-open')
+      document.documentElement.classList.remove('modal-open')
       
-      // Restore scrolling
-      document.body.style.overflow = (document.body as any).__originalOverflow || 'unset'
-      document.documentElement.style.overflow = (document.documentElement as any).__originalOverflow || 'unset'
+      // Get stored scroll position
+      const scrollY = (document.body as any).__scrollY || 0
       
-      // Restore container overflows
-      const originalOverflows = (document.body as any).__originalContainerOverflows || []
-      originalOverflows.forEach(({ element, overflow }: { element: HTMLElement; overflow: string }) => {
-        element.style.overflow = overflow
-      })
+      // Restore body styles
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
       
-      // Clean up stored values
-      delete (document.body as any).__originalOverflow
-      delete (document.documentElement as any).__originalOverflow
-      delete (document.body as any).__originalContainerOverflows
+      // Restore scroll position
+      window.scrollTo(0, scrollY)
+      
+      // Clean up stored scroll position
+      delete (document.body as any).__scrollY
       
       setEmail('')
       setPassword('')
@@ -81,18 +74,18 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
     return () => {
       // Cleanup: always restore scrolling when component unmounts
       document.body.classList.remove('modal-open')
-      document.body.style.overflow = (document.body as any).__originalOverflow || 'unset'
-      document.documentElement.style.overflow = (document.documentElement as any).__originalOverflow || 'unset'
+      document.documentElement.classList.remove('modal-open')
       
-      const originalOverflows = (document.body as any).__originalContainerOverflows || []
-      originalOverflows.forEach(({ element, overflow }: { element: HTMLElement; overflow: string }) => {
-        element.style.overflow = overflow
-      })
+      const scrollY = (document.body as any).__scrollY || 0
       
-      // Clean up stored values
-      delete (document.body as any).__originalOverflow
-      delete (document.documentElement as any).__originalOverflow
-      delete (document.body as any).__originalContainerOverflows
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+      
+      window.scrollTo(0, scrollY)
+      delete (document.body as any).__scrollY
     }
   }, [isOpen, initialMode])
 
@@ -149,7 +142,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] overflow-hidden">
+    <div className="fixed inset-0 z-[9999] overflow-hidden modal-overlay">
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
