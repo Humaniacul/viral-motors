@@ -24,26 +24,53 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
   useEffect(() => {
     if (isOpen) {
+      // Add CSS class to body for comprehensive scroll prevention
+      document.body.classList.add('modal-open')
+      
+      // Store original overflow values
+      const originalBodyOverflow = document.body.style.overflow
+      const originalHtmlOverflow = document.documentElement.style.overflow
+      
       // Prevent scrolling on body and html
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
-      // Also prevent scrolling on the main container
-      const mainContainer = document.querySelector('main, .min-h-screen')
-      if (mainContainer) {
-        (mainContainer as HTMLElement).style.overflow = 'hidden'
-      }
+      
+      // Also prevent scrolling on all possible scrollable containers
+      const scrollableContainers = document.querySelectorAll('main, .min-h-screen, #__next, [data-scroll-container]')
+      const originalOverflows: { element: HTMLElement; overflow: string }[] = []
+      
+      scrollableContainers.forEach(container => {
+        const element = container as HTMLElement
+        originalOverflows.push({ element, overflow: element.style.overflow })
+        element.style.overflow = 'hidden'
+      })
+      
+      // Store original values for cleanup
+      ;(document.body as any).__originalOverflow = originalBodyOverflow
+      ;(document.documentElement as any).__originalOverflow = originalHtmlOverflow
+      ;(document.body as any).__originalContainerOverflows = originalOverflows
       
       setMode(initialMode)
       setError('')
       setSuccess('')
     } else {
+      // Remove CSS class from body
+      document.body.classList.remove('modal-open')
+      
       // Restore scrolling
-      document.body.style.overflow = 'unset'
-      document.documentElement.style.overflow = 'unset'
-      const mainContainer = document.querySelector('main, .min-h-screen')
-      if (mainContainer) {
-        (mainContainer as HTMLElement).style.overflow = 'unset'
-      }
+      document.body.style.overflow = (document.body as any).__originalOverflow || 'unset'
+      document.documentElement.style.overflow = (document.documentElement as any).__originalOverflow || 'unset'
+      
+      // Restore container overflows
+      const originalOverflows = (document.body as any).__originalContainerOverflows || []
+      originalOverflows.forEach(({ element, overflow }: { element: HTMLElement; overflow: string }) => {
+        element.style.overflow = overflow
+      })
+      
+      // Clean up stored values
+      delete (document.body as any).__originalOverflow
+      delete (document.documentElement as any).__originalOverflow
+      delete (document.body as any).__originalContainerOverflows
       
       setEmail('')
       setPassword('')
@@ -53,12 +80,19 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
 
     return () => {
       // Cleanup: always restore scrolling when component unmounts
-      document.body.style.overflow = 'unset'
-      document.documentElement.style.overflow = 'unset'
-      const mainContainer = document.querySelector('main, .min-h-screen')
-      if (mainContainer) {
-        (mainContainer as HTMLElement).style.overflow = 'unset'
-      }
+      document.body.classList.remove('modal-open')
+      document.body.style.overflow = (document.body as any).__originalOverflow || 'unset'
+      document.documentElement.style.overflow = (document.documentElement as any).__originalOverflow || 'unset'
+      
+      const originalOverflows = (document.body as any).__originalContainerOverflows || []
+      originalOverflows.forEach(({ element, overflow }: { element: HTMLElement; overflow: string }) => {
+        element.style.overflow = overflow
+      })
+      
+      // Clean up stored values
+      delete (document.body as any).__originalOverflow
+      delete (document.documentElement as any).__originalOverflow
+      delete (document.body as any).__originalContainerOverflows
     }
   }, [isOpen, initialMode])
 
@@ -123,7 +157,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
       />
       
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4 overflow-y-auto">
+      <div className="flex min-h-full items-center justify-center p-4 overflow-y-auto modal-content">
         <div className="relative w-full max-w-md transform transition-all duration-300 scale-100 opacity-100 z-[10000]">
           <div className="bg-black border border-primary-red/30 rounded-2xl shadow-2xl overflow-hidden">
             {/* Close Button */}

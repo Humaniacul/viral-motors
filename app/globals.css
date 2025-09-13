@@ -148,3 +148,25 @@ img {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Modal scroll prevention */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+html.modal-open {
+  overflow: hidden !important;
+}
+
+/* Ensure all scrollable containers are locked when modal is open */
+body.modal-open * {
+  overflow: hidden !important;
+}
+
+/* Allow modal content to scroll */
+body.modal-open .modal-content {
+  overflow: auto !important;
+}
