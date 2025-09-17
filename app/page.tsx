@@ -134,7 +134,7 @@ export default async function HomePage() {
   // Load real articles from database
   const allArticles = await getArticles({ 
     limit: 20, 
-    published: true 
+    status: 'published' 
   }).catch(() => [])
   
   // Transform database articles to match component interface

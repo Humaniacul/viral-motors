@@ -58,10 +58,16 @@ const NewsletterModal = ({ isOpen, onClose }: NewsletterModalProps) => {
     setError('')
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Mock success
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, interests }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || 'Subscription failed')
+      }
+
       setIsSuccess(true)
       
       // Auto close after success
@@ -76,7 +82,7 @@ const NewsletterModal = ({ isOpen, onClose }: NewsletterModalProps) => {
       }, 2000)
 
     } catch (err) {
-      setError('Something went wrong. Please try again.')
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

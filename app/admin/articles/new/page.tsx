@@ -17,11 +17,10 @@ interface ArticleFormData {
   category: string
   tags: string[]
   featured: boolean
-  status: 'draft' | 'published' | 'scheduled'
+  status: 'draft' | 'published'
   seo_title: string
   seo_description: string
   image_url: string
-  scheduled_for: string
 }
 
 const CreateArticle = () => {
@@ -40,7 +39,6 @@ const CreateArticle = () => {
     seo_title: '',
     seo_description: '',
     image_url: '',
-    scheduled_for: ''
   })
   const [tagInput, setTagInput] = useState('')
   const [previewMode, setPreviewMode] = useState(false)
@@ -185,26 +183,17 @@ const CreateArticle = () => {
     return Math.ceil(wordCount / wordsPerMinute)
   }
 
-  const handleSave = async (status: 'draft' | 'published' | 'scheduled') => {
+  const handleSave = async (status: 'draft' | 'published') => {
     if (!user || !formData.title.trim() || !formData.content.trim()) {
       alert('Please fill in the required fields (title and content)')
-      return
-    }
-
-    if (status === 'scheduled' && !formData.scheduled_for) {
-      alert('Please select a publication date and time for scheduling')
       return
     }
 
     setSaving(true)
     try {
       let publishedAt = null
-      let scheduledFor = null
-
       if (status === 'published') {
         publishedAt = new Date().toISOString()
-      } else if (status === 'scheduled') {
-        scheduledFor = new Date(formData.scheduled_for).toISOString()
       }
 
       const articleData = {
@@ -213,7 +202,6 @@ const CreateArticle = () => {
         author_id: user.id,
         reading_time: calculateReadingTime(formData.content),
         published_at: publishedAt,
-        scheduled_for: scheduledFor,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
@@ -226,9 +214,7 @@ const CreateArticle = () => {
 
       if (error) throw error
 
-      const message = status === 'scheduled' 
-        ? `Article scheduled for ${new Date(formData.scheduled_for).toLocaleString()}`
-        : status === 'published' 
+      const message = status === 'published' 
         ? 'Article published successfully!'
         : 'Draft saved successfully!'
       
@@ -330,15 +316,6 @@ const CreateArticle = () => {
                 >
                   <Sparkles size={18} className="mr-2" />
                   {saving ? 'Publishing...' : 'Publish Now'}
-                </button>
-                
-                <button
-                  onClick={() => handleSave('scheduled')}
-                  disabled={saving || !formData.scheduled_for}
-                  className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all duration-200 disabled:opacity-50"
-                >
-                  <Calendar size={18} className="mr-2" />
-                  Schedule
                 </button>
               </div>
             </div>
@@ -591,34 +568,7 @@ const CreateArticle = () => {
                 </div>
               </div>
 
-              {/* Article Scheduling */}
-              <div className="bg-dark-card rounded-xl p-6 shadow-card">
-                <h3 className="flex items-center text-lg font-bold text-dark-text mb-4">
-                  <Calendar size={20} className="mr-2" />
-                  Publishing Schedule
-                </h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-dark-text mb-2">
-                      Schedule Publication
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={formData.scheduled_for}
-                      onChange={(e) => handleInputChange('scheduled_for', e.target.value)}
-                      min={new Date().toISOString().slice(0, 16)}
-                      className="w-full bg-gray-900 text-dark-text border border-gray-700 rounded-lg p-3 focus:outline-none focus:border-primary-red transition-colors duration-200"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">
-                      {formData.scheduled_for 
-                        ? `Will publish on ${new Date(formData.scheduled_for).toLocaleString()}`
-                        : 'Leave empty to publish immediately'
-                      }
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {/* Scheduling removed to match schema; implement later if added to DB */}
             </div>
           </div>
         </div>

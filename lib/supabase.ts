@@ -30,7 +30,7 @@ export interface Article {
   author_id: string
   category: string
   tags: string[]
-  published: boolean
+  status: 'draft' | 'published' | 'archived'
   featured: boolean
   viral_score: number
   view_count: number
@@ -127,7 +127,7 @@ export const getArticles = async (options?: {
   offset?: number
   category?: string
   featured?: boolean
-  published?: boolean
+  status?: 'draft' | 'published' | 'archived'
 }) => {
   let query = supabase
     .from('articles')
@@ -143,8 +143,8 @@ export const getArticles = async (options?: {
       _count: comments (count)
     `)
   
-  if (options?.published !== undefined) {
-    query = query.eq('published', options.published)
+  if (options?.status !== undefined) {
+    query = query.eq('status', options.status)
   }
   
   if (options?.category) {
@@ -203,7 +203,7 @@ export const getArticleBySlug = async (slug: string) => {
       )
     `)
     .eq('slug', slug)
-    .eq('published', true)
+    .eq('status', 'published')
     .single()
   
   if (error) throw error
@@ -216,6 +216,35 @@ export const incrementArticleViews = async (articleId: string) => {
   })
   
   if (error) throw error
+}
+
+export const getArticleById = async (id: string) => {
+  const { data, error } = await supabase
+    .from('articles')
+    .select(`
+      *,
+      profiles:author_id (
+        id,
+        username,
+        full_name,
+        avatar_url
+      )
+    `)
+    .eq('id', id)
+    .single()
+  if (error) throw error
+  return data as Article
+}
+
+export const updateArticleById = async (id: string, updates: Partial<Article>) => {
+  const { data, error } = await supabase
+    .from('articles')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data as Article
 }
 
 export const toggleBookmark = async (userId: string, articleId: string) => {

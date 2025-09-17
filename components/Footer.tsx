@@ -15,12 +15,18 @@ const Footer = () => {
     if (!email.trim()) return
 
     setIsSubscribing(true)
-    
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      setSubscriptionStatus('success')
-      setEmail('')
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setSubscriptionStatus('success')
+        setEmail('')
+      } else {
+        setSubscriptionStatus('error')
+      }
       setTimeout(() => setSubscriptionStatus('idle'), 3000)
     } catch (error) {
       setSubscriptionStatus('error')

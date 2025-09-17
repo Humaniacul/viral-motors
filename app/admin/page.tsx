@@ -15,7 +15,7 @@ interface Article {
   slug: string
   excerpt: string
   category: string
-  status?: 'draft' | 'published' | 'archived' | 'scheduled'
+  status?: 'draft' | 'published' | 'archived'
   featured: boolean
   view_count: number
   like_count: number
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
   const loadArticles = async () => {
     try {
       setArticlesLoading(true)
-      const data = await getArticles({ limit: 50, published: undefined })
+      const data = await getArticles({ limit: 50 })
       setArticles(data)
       
       // Calculate stats

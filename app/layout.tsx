@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { AuthProvider } from '../contexts/AuthContext'
 import './globals.css'
+import Script from 'next/script'
+import Analytics from '../components/Analytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -93,6 +95,24 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <div className="min-h-screen bg-dark-bg text-dark-text">
           <AuthProvider>
+            {/* GA4 */}
+            {process.env.NEXT_PUBLIC_GA_ID && (
+              <>
+                <Script
+                  src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+                  strategy="afterInteractive"
+                />
+                <Script id="ga4-init" strategy="afterInteractive">
+                  {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+                  `}
+                </Script>
+                <Analytics />
+              </>
+            )}
             {children}
           </AuthProvider>
         </div>

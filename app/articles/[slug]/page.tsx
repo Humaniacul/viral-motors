@@ -62,6 +62,14 @@ const ArticlePage = () => {
       // Increment view count after article loads
       incrementArticleViews(article.id)
       setLikeCount(article.like_count)
+      // GA event
+      if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        ;(window as any).gtag('event', 'article_view', {
+          event_category: 'engagement',
+          event_label: article.slug,
+          value: 1,
+        })
+      }
     }
   }, [article])
 
@@ -122,6 +130,13 @@ const ArticlePage = () => {
       // Fallback to copying URL
       navigator.clipboard.writeText(window.location.href)
       // Could show a toast notification here
+    }
+    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function' && article) {
+      ;(window as any).gtag('event', 'share', {
+        method: 'native_or_copy',
+        content_type: 'article',
+        item_id: article.slug,
+      })
     }
   }
 
