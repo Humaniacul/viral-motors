@@ -40,6 +40,9 @@ export interface Article {
   created_at: string
   updated_at: string
   published_at: string | null
+  // Optional SEO fields
+  seo_title?: string | null
+  seo_description?: string | null
   // Relations
   profiles?: Profile
   bookmarks?: Bookmark[]
