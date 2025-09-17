@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save, Eye, Calendar, Tag, Image as ImageIcon, Settings, Sparkles } from 'lucide-react'
-import { useAuth } from '../../../../contexts/AuthContext'
-import { supabase } from '../../../../lib/supabase'
-import Navbar from '../../../../components/Navbar'
-import RichTextEditor from '../../../../components/RichTextEditor'
+import { useAuth } from '@/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
+import Navbar from '@/components/Navbar'
+import RichTextEditor from '@/components/RichTextEditor'
 
 interface ArticleFormData {
   title: string
