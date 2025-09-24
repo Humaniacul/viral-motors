@@ -37,10 +37,13 @@ const ProfilePage = () => {
     if (!user || !profile) return
 
     try {
+      console.log('Saving profile with data:', editForm)
       await updateUserProfile(editForm)
       setEditing(false)
+      alert('Profile updated successfully!')
     } catch (error) {
       console.error('Error updating profile:', error)
+      alert('Error updating profile: ' + (error as any).message)
     }
   }
 
@@ -378,26 +381,43 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Admin Actions */}
-            {profile.role === 'admin' && (
-              <div className="mt-6 grid grid-cols-1 gap-3 sm:flex sm:items-center sm:justify-start">
+          </div>
+
+          {/* Admin Actions */}
+          {profile?.role === 'admin' && (
+            <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
+              <h2 className="text-2xl font-bold text-dark-text mb-6">Admin Actions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button
                   onClick={() => router.push('/admin/articles/new')}
-                  className="inline-flex items-center bg-primary-red hover:bg-primary-red-light text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
+                  className="inline-flex items-center justify-center bg-primary-red hover:bg-primary-red-light text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
                 >
                   <FileText size={18} className="mr-2" />
                   Create Article
                 </button>
                 <button
                   onClick={() => router.push('/admin')}
-                  className="inline-flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-gray-600 text-dark-text hover:bg-gray-800"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-gray-600 text-dark-text hover:bg-gray-800"
                 >
                   <Settings size={18} className="mr-2" />
                   Admin Dashboard
                 </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Debug Info */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
+              <h2 className="text-xl font-bold text-dark-text mb-4">Debug Info</h2>
+              <div className="text-gray-300 text-sm space-y-2">
+                <p>User ID: {user?.id}</p>
+                <p>Profile Role: {profile?.role || 'No role'}</p>
+                <p>Profile Loaded: {profile ? 'Yes' : 'No'}</p>
+                <p>Is Admin: {profile?.role === 'admin' ? 'Yes' : 'No'}</p>
+              </div>
+            </div>
+          )}
 
           {/* Recent Activity Placeholder */}
           <div className="bg-dark-card rounded-2xl p-8 shadow-card">
