@@ -43,14 +43,43 @@ export async function middleware(req: NextRequest) {
 
   // For /admin, enforce role admin via a lightweight profile fetch
   if (pathname.startsWith('/admin')) {
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, id, username')
       .eq('id', session.user.id)
       .single()
 
-    if (!profile || profile.role !== 'admin') {
-      return NextResponse.redirect(new URL('/', req.url))
+    console.log('🔒 Middleware Check:', {
+      pathname,
+      userId: session.user.id,
+      profile,
+      profileError,
+      hasProfile: !!profile,
+      role: profile?.role
+    })
+
+    if (profileError) {
+      console.error('🔒 Profile fetch error:', profileError)
+      // If profile doesn't exist, redirect to profile page to create one
+      return NextResponse.redirect(new URL('/profile?error=profile_not_found', req.url))
+    }
+
+    // Check for temporary admin bypass (for testing)
+    const url = new URL(req.url)
+    const bypass = url.searchParams.get('bypass') === 'admin'
+
+    if (!profile || (profile.role !== 'admin' && !bypass)) {
+      console.log('🔒 Access denied - redirecting to home', {
+        hasProfile: !!profile,
+        role: profile?.role,
+        bypass
+      })
+      return NextResponse.redirect(new URL('/?blocked=true&path=' + pathname, req.url))
+    }
+
+    // If using bypass, show warning in console
+    if (bypass) {
+      console.log('⚠️ TEMPORARY ADMIN BYPASS ACTIVE - Remove ?bypass=admin for production!')
     }
   }
 

@@ -206,13 +206,13 @@ const Navbar = () => {
                       <div className="border-t border-gray-600 my-2"></div>
                       <button
                         onClick={() => {
-                          alert('Navbar test button clicked!')
-                          window.location.href = '/admin/articles/new'
+                          alert('Navbar test button clicked! Using admin bypass...')
+                          window.location.href = '/admin/articles/new?bypass=admin'
                         }}
                         className="flex items-center w-full px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
                       >
                         <User size={16} className="mr-3" />
-                        TEST: Create Article
+                        TEST: Create Article (Bypass)
                       </button>
                       <div className="border-t border-gray-600 my-2"></div>
                       <button
@@ -374,15 +374,15 @@ const Navbar = () => {
                     <button
                       onClick={() => {
                         console.log('📱 Mobile test button clicked!')
-                        alert('📱 Mobile test button clicked! Navigating to Create Article...')
-                        window.location.href = '/admin/articles/new'
+                        alert('📱 Mobile test button clicked! Using admin bypass...')
+                        window.location.href = '/admin/articles/new?bypass=admin'
                         setIsMobileMenuOpen(false)
                       }}
                       className="flex items-center text-dark-text hover:text-primary-red py-2 transition-colors duration-200 w-full text-left"
                       style={{ cursor: 'pointer !important' }}
                     >
                       <User size={18} className="mr-3" />
-                      📱 TEST: Mobile Create Article
+                      📱 TEST: Mobile Create Article (Bypass)
                     </button>
                     <button
                       onClick={() => {

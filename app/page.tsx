@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import ArticleCard from '../components/ArticleCard'
@@ -130,15 +133,38 @@ const sampleArticles = [
   }
 ]
 
-export default async function HomePage() {
-  // Load real articles from database
-  const allArticles = await getArticles({ 
-    limit: 20, 
-    status: 'published' 
-  }).catch(() => [])
+export default function HomePage() {
+  const [blocked, setBlocked] = useState<string | null>(null)
+  const [blockedPath, setBlockedPath] = useState<string | null>(null)
+  const [articles, setArticles] = useState<any[]>([])
+
+  useEffect(() => {
+    // Check for blocked access
+    const url = new URL(window.location.href)
+    const blockedParam = url.searchParams.get('blocked')
+    const blockedPathParam = url.searchParams.get('path')
+
+    setBlocked(blockedParam)
+    setBlockedPath(blockedPathParam)
+
+    // Load real articles from database
+    const loadArticles = async () => {
+      try {
+        const allArticles = await getArticles({
+          limit: 20,
+          status: 'published'
+        })
+        setArticles(allArticles)
+      } catch (error) {
+        console.log('Failed to load articles:', error)
+      }
+    }
+
+    loadArticles()
+  }, [])
   
   // Transform database articles to match component interface
-  const transformedArticles = allArticles.map(article => ({
+  const transformedArticles = articles.map(article => ({
     id: article.id,
     title: article.title,
     excerpt: article.excerpt || '',
@@ -165,7 +191,16 @@ export default async function HomePage() {
     <div className="min-h-screen">
       {/* Navigation */}
       <Navbar />
-      
+
+      {/* Debug Banner for Blocked Access */}
+      {blocked && (
+        <div className="bg-red-600 text-white px-4 py-2 text-center">
+          🚫 ACCESS BLOCKED: You tried to access <strong>{blockedPath}</strong> but were redirected here.
+          This usually means your profile role is not set to 'admin' or your profile is not loaded correctly.
+          Check the browser console for detailed logs.
+        </div>
+      )}
+
       {/* Hero Section */}
       <Hero />
       
