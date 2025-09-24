@@ -28,6 +28,8 @@ export default function BookmarksPage() {
             image_url,
             category,
             reading_time,
+            view_count,
+            like_count,
             published_at,
             created_at,
             profiles:author_id (
@@ -72,6 +74,8 @@ export default function BookmarksPage() {
                   publishedAt: article.published_at || article.created_at,
                   category: article.category,
                   readTime: `${article.reading_time} min`,
+                  views: article.view_count ?? 0,
+                  likes: article.like_count ?? 0,
                   slug: article.slug,
                 }} layout="vertical" showStats={false} />
               ))}
