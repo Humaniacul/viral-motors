@@ -195,6 +195,14 @@ const Navbar = () => {
                         <Settings size={16} className="mr-3" />
                         Settings
                       </Link>
+                      <Link
+                        href="/test"
+                        className="flex items-center px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
+                        onClick={() => setUserDropdownOpen(false)}
+                      >
+                        <Settings size={16} className="mr-3" />
+                        🧪 Go to Test Page
+                      </Link>
                       <div className="border-t border-gray-600 my-2"></div>
                       <button
                         onClick={() => {
@@ -355,16 +363,26 @@ const Navbar = () => {
                       <Settings size={18} className="mr-3" />
                       Settings
                     </Link>
+                    <Link
+                      href="/test"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center text-dark-text hover:text-primary-red py-2 transition-colors duration-200"
+                    >
+                      <Settings size={18} className="mr-3" />
+                      🧪 Test Page
+                    </Link>
                     <button
                       onClick={() => {
-                        alert('Mobile menu test button clicked!')
+                        console.log('📱 Mobile test button clicked!')
+                        alert('📱 Mobile test button clicked! Navigating to Create Article...')
                         window.location.href = '/admin/articles/new'
                         setIsMobileMenuOpen(false)
                       }}
                       className="flex items-center text-dark-text hover:text-primary-red py-2 transition-colors duration-200 w-full text-left"
+                      style={{ cursor: 'pointer !important' }}
                     >
                       <User size={18} className="mr-3" />
-                      TEST: Mobile Create Article
+                      📱 TEST: Mobile Create Article
                     </button>
                     <button
                       onClick={() => {

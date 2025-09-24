@@ -406,29 +406,45 @@ const ProfilePage = () => {
               </button>
               <button
                 onClick={() => {
+                  console.log('🟢 Create Article clicked!')
+                  console.log('🟢 Router exists:', !!router)
+                  console.log('🟢 Current URL:', window.location.href)
+
                   try {
-                    console.log('TEST: Router push to /admin/articles/new')
+                    alert('🟢 Navigating to Create Article page...')
                     router.push('/admin/articles/new')
+                    console.log('🟢 Router push successful')
                   } catch (err) {
-                    console.error('TEST: Router error:', err)
-                    alert('Router error: ' + (err as Error).message)
+                    console.error('🟢 Router error:', err)
+                    alert('🟢 Router error: ' + (err as Error).message)
+                    // Fallback navigation
+                    window.location.href = '/admin/articles/new'
                   }
                 }}
                 className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
-                style={{ display: 'block !important', cursor: 'pointer !important' }}
+                style={{ display: 'block !important', cursor: 'pointer !important', zIndex: 999 }}
               >
-                🟢 Create Article (Real)
+                🟢 Create Article (Real) - Click Me!
               </button>
               <button
                 onClick={() => {
-                  console.log('TEST: Edit Profile toggle')
-                  setEditing(!editing)
-                  alert('TEST: Edit mode toggled to: ' + !editing)
+                  console.log('🔵 Edit Profile clicked!')
+                  console.log('🔵 Current editing state:', editing)
+
+                  try {
+                    const newEditingState = !editing
+                    setEditing(newEditingState)
+                    alert('🔵 Edit mode: ' + (newEditingState ? 'ON' : 'OFF'))
+                    console.log('🔵 Edit mode set to:', newEditingState)
+                  } catch (err) {
+                    console.error('🔵 Edit toggle error:', err)
+                    alert('🔵 Error toggling edit mode: ' + (err as Error).message)
+                  }
                 }}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
-                style={{ display: 'block !important', cursor: 'pointer !important' }}
+                className="w-full bg-blue-500 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
+                style={{ display: 'block !important', cursor: 'pointer !important', zIndex: 999 }}
               >
-                🔵 Toggle Edit Profile
+                🔵 Toggle Edit Profile - Click Me!
               </button>
             </div>
           </div>
