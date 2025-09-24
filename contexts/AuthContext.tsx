@@ -162,6 +162,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
+      // Ensure local state is cleared immediately
+      setSession(null)
+      setUser(null)
+      setProfile(null)
+      // Hard redirect to clear any stale client state/UI
+      if (typeof window !== 'undefined') {
+        window.location.href = '/'
+      }
     } finally {
       setLoading(false)
     }

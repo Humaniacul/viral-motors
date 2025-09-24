@@ -157,6 +157,27 @@ const Navbar = () => {
                         <User size={16} className="mr-3" />
                         View Profile
                       </Link>
+                      {profile?.role === 'admin' && (
+                        <>
+                          <Link
+                            href="/admin"
+                            className="flex items-center px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
+                            onClick={() => setUserDropdownOpen(false)}
+                          >
+                            <Settings size={16} className="mr-3" />
+                            Admin Dashboard
+                          </Link>
+                          <Link
+                            href="/admin/articles/new"
+                            className="flex items-center px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
+                            onClick={() => setUserDropdownOpen(false)}
+                          >
+                            <Bookmark size={16} className="mr-3" />
+                            Create Article
+                          </Link>
+                          <div className="border-t border-gray-600 my-2"></div>
+                        </>
+                      )}
                       <Link
                         href="/bookmarks"
                         className="flex items-center px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
@@ -294,6 +315,26 @@ const Navbar = () => {
                       <Bookmark size={18} className="mr-3" />
                       Saved Articles
                     </Link>
+                    {profile?.role === 'admin' && (
+                      <>
+                        <Link
+                          href="/admin"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center text-dark-text hover:text-primary-red py-2 transition-colors duration-200"
+                        >
+                          <Settings size={18} className="mr-3" />
+                          Admin Dashboard
+                        </Link>
+                        <Link
+                          href="/admin/articles/new"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center text-dark-text hover:text-primary-red py-2 transition-colors duration-200"
+                        >
+                          <Bookmark size={18} className="mr-3" />
+                          Create Article
+                        </Link>
+                      </>
+                    )}
                     <Link
                       href="/settings"
                       onClick={() => setIsMobileMenuOpen(false)}
