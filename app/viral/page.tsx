@@ -5,7 +5,12 @@ import SectionBlock from '../../components/SectionBlock'
 import { getArticles } from '../../lib/supabase'
 
 export default async function ViralPage() {
-  const articles = await getArticles({ status: 'published', limit: 24 }).catch(() => [])
+  let articles: any[] = []
+  try {
+    articles = await getArticles({ status: 'published', limit: 24 })
+  } catch (error) {
+    console.log('Failed to load articles:', error)
+  }
   const viral = articles
     .filter(a => (a.viral_score ?? 0) >= 80 || a.featured)
     .sort((a, b) => (b.viral_score ?? 0) - (a.viral_score ?? 0))

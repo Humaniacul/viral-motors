@@ -5,7 +5,12 @@ import SectionBlock from '../../components/SectionBlock'
 import { getArticles } from '../../lib/supabase'
 
 export default async function ReviewsPage() {
-  const articles = await getArticles({ status: 'published', category: 'Reviews', limit: 24 }).catch(() => [])
+  let articles: any[] = []
+  try {
+    articles = await getArticles({ status: 'published', category: 'Reviews', limit: 24 })
+  } catch (error) {
+    console.log('Failed to load articles:', error)
+  }
 
   return (
     <div className="min-h-screen bg-dark-bg">
