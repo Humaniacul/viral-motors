@@ -196,6 +196,17 @@ const Navbar = () => {
                       </Link>
                       <div className="border-t border-gray-600 my-2"></div>
                       <button
+                        onClick={() => {
+                          alert('Navbar test button clicked!')
+                          window.location.href = '/admin/articles/new'
+                        }}
+                        className="flex items-center w-full px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
+                      >
+                        <User size={16} className="mr-3" />
+                        TEST: Create Article
+                      </button>
+                      <div className="border-t border-gray-600 my-2"></div>
+                      <button
                         onClick={handleSignOut}
                         className="flex items-center w-full px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
                       >
@@ -343,6 +354,17 @@ const Navbar = () => {
                       <Settings size={18} className="mr-3" />
                       Settings
                     </Link>
+                    <button
+                      onClick={() => {
+                        alert('Mobile menu test button clicked!')
+                        window.location.href = '/admin/articles/new'
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="flex items-center text-dark-text hover:text-primary-red py-2 transition-colors duration-200 w-full text-left"
+                    >
+                      <User size={18} className="mr-3" />
+                      TEST: Mobile Create Article
+                    </button>
                     <button
                       onClick={() => {
                         handleSignOut()

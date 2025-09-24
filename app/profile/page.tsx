@@ -385,45 +385,49 @@ const ProfilePage = () => {
 
           {/* Admin Actions - Always show for testing */}
           <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
-            <h2 className="text-2xl font-bold text-dark-text mb-6">Admin Actions (Testing)</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">Admin Actions (Testing)</h2>
             <div className="mb-4 text-gray-300 text-sm">
-              Profile Role: {profile?.role || 'undefined'}
+              Profile Role: {profile?.role || 'undefined'} | User ID: {user?.id || 'none'}
             </div>
             <div className="space-y-4">
               <button
                 onClick={() => {
-                  console.log('Create Article button clicked')
-                  console.log('Router:', router)
-                  alert('Navigating to /admin/articles/new')
-                  router.push('/admin/articles/new')
+                  console.log('TEST: Create Article button clicked')
+                  console.log('TEST: Router exists:', !!router)
+                  console.log('TEST: Router object:', router)
+                  console.log('TEST: Current URL:', window.location.href)
+                  alert('TEST: Button clicked! Check console for logs.')
                 }}
-                className="w-full bg-primary-red hover:bg-red-600 text-white px-6 py-4 rounded-lg font-medium transition-all duration-200 text-center"
-                style={{ display: 'block', cursor: 'pointer' }}
+                className="w-full bg-red-500 hover:bg-red-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
+                style={{ display: 'block !important', cursor: 'pointer !important' }}
               >
-                📝 Create Article (Test)
+                🔴 TEST BUTTON - Click Me First!
               </button>
               <button
                 onClick={() => {
-                  console.log('Admin Dashboard button clicked')
-                  console.log('Router:', router)
-                  alert('Navigating to /admin')
-                  router.push('/admin')
+                  try {
+                    console.log('TEST: Router push to /admin/articles/new')
+                    router.push('/admin/articles/new')
+                  } catch (err) {
+                    console.error('TEST: Router error:', err)
+                    alert('Router error: ' + err.message)
+                  }
                 }}
-                className="w-full border-2 border-gray-600 text-dark-text hover:bg-gray-800 px-6 py-4 rounded-lg font-medium transition-all duration-200 text-center"
-                style={{ display: 'block', cursor: 'pointer' }}
+                className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
+                style={{ display: 'block !important', cursor: 'pointer !important' }}
               >
-                ⚙️ Admin Dashboard (Test)
+                🟢 Create Article (Real)
               </button>
               <button
                 onClick={() => {
-                  console.log('Edit Profile button clicked')
+                  console.log('TEST: Edit Profile toggle')
                   setEditing(!editing)
-                  alert(`Edit mode: ${!editing}`)
+                  alert('TEST: Edit mode toggled to: ' + !editing)
                 }}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-medium transition-all duration-200 text-center"
-                style={{ display: 'block', cursor: 'pointer' }}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
+                style={{ display: 'block !important', cursor: 'pointer !important' }}
               >
-                ✏️ Toggle Edit Profile (Test)
+                🔵 Toggle Edit Profile
               </button>
             </div>
           </div>
