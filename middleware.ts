@@ -41,7 +41,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(redirect)
   }
 
-  // For /admin, enforce role editor/admin via a lightweight profile fetch
+  // For /admin, enforce role admin via a lightweight profile fetch
   if (pathname.startsWith('/admin')) {
     const { data: profile } = await supabase
       .from('profiles')
@@ -49,7 +49,7 @@ export async function middleware(req: NextRequest) {
       .eq('id', session.user.id)
       .single()
 
-    if (!profile || (profile.role !== 'admin' && profile.role !== 'editor')) {
+    if (!profile || profile.role !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url))
     }
   }

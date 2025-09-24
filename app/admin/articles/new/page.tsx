@@ -58,8 +58,8 @@ const CreateArticle = () => {
     'Guides'
   ]
 
-  // Check if user can access admin
-  const canAccessAdmin = profile?.role === 'admin' || profile?.role === 'editor'
+  // Check if user can access admin (admin only)
+  const canAccessAdmin = profile?.role === 'admin'
 
   useEffect(() => {
     if (!loading && (!user || !canAccessAdmin)) {
@@ -206,9 +206,10 @@ const CreateArticle = () => {
         updated_at: new Date().toISOString()
       }
 
+      // Upsert by unique slug to avoid duplicates
       const { data, error } = await supabase
         .from('articles')
-        .insert([articleData])
+        .upsert(articleData, { onConflict: 'slug' })
         .select()
         .single()
 

@@ -40,8 +40,8 @@ const AdminDashboard = () => {
     totalLikes: 0
   })
 
-  // Check if user is admin or editor
-  const canAccessAdmin = profile?.role === 'admin' || profile?.role === 'editor'
+  // Check if user is admin only (server-side middleware also enforces)
+  const canAccessAdmin = profile?.role === 'admin'
 
   useEffect(() => {
     if (!loading && (!user || !canAccessAdmin)) {

@@ -142,8 +142,7 @@ export const getArticles = async (options?: {
         full_name,
         avatar_url
       ),
-      bookmarks (id, user_id),
-      _count: comments (count)
+      bookmarks (id, user_id)
     `)
   
   if (options?.status !== undefined) {
@@ -214,11 +213,12 @@ export const getArticleBySlug = async (slug: string) => {
 }
 
 export const incrementArticleViews = async (articleId: string) => {
-  const { error } = await supabase.rpc('increment_article_views', {
-    article_id: articleId
-  })
-  
-  if (error) throw error
+  // Prefer final schema function name; fallback if needed
+  let { error } = await supabase.rpc('increment_view_count', { article_id: articleId })
+  if (error) {
+    const fallback = await supabase.rpc('increment_article_views', { article_id: articleId })
+    if (fallback.error) throw fallback.error
+  }
 }
 
 export const getArticleById = async (id: string) => {
