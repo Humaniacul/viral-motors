@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { User, Edit2, Camera, MapPin, Globe, Calendar, BookOpen, Heart, Eye, Settings } from 'lucide-react'
+import { User, Edit2, Camera, MapPin, Globe, Calendar, BookOpen, Heart, Eye, Settings, FileText } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
