@@ -377,6 +377,26 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Admin Actions */}
+            {profile.role === 'admin' && (
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:flex sm:items-center sm:justify-start">
+                <button
+                  onClick={() => router.push('/admin/articles/new')}
+                  className="inline-flex items-center bg-primary-red hover:bg-primary-red-light text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
+                >
+                  <FileText size={18} className="mr-2" />
+                  Create Article
+                </button>
+                <button
+                  onClick={() => router.push('/admin')}
+                  className="inline-flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-gray-600 text-dark-text hover:bg-gray-800"
+                >
+                  <Settings size={18} className="mr-2" />
+                  Admin Dashboard
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Recent Activity Placeholder */}
