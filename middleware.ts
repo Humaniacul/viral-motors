@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
 
   // Only guard these paths
   const pathname = url.pathname
-  const requiresAuth = pathname.startsWith('/profile') || pathname.startsWith('/admin')
+  const requiresAuth = pathname.startsWith('/profile') || pathname.startsWith('/admin') || pathname.startsWith('/bookmarks') || pathname.startsWith('/settings')
   if (!requiresAuth) return NextResponse.next()
 
   // Create a Supabase server client bound to request cookies
@@ -58,7 +58,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/profile', '/profile/:path*', '/admin', '/admin/:path*'],
+  matcher: ['/profile', '/profile/:path*', '/admin', '/admin/:path*', '/bookmarks', '/settings'],
 }
 
 

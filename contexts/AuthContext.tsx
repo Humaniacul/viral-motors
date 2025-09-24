@@ -11,7 +11,7 @@ interface AuthContextType {
   loading: boolean
   signUp: (email: string, password: string, userData?: any) => Promise<any>
   signIn: (email: string, password: string) => Promise<any>
-  signInWithProvider: (provider: 'google' | 'github' | 'twitter') => Promise<any>
+  signInWithProvider: (provider: 'google' | 'github' | 'twitter', redirectPath?: string) => Promise<any>
   signOut: () => Promise<void>
   updateUserProfile: (updates: Partial<Profile>) => Promise<Profile>
 }
@@ -142,13 +142,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
-  const signInWithProvider = async (provider: 'google' | 'github' | 'twitter') => {
+  const signInWithProvider = async (provider: 'google' | 'github' | 'twitter', redirectPath?: string) => {
     setLoading(true)
     try {
+      // Preserve intended redirect path
+      let target = redirectPath
+      if (!target && typeof window !== 'undefined') {
+        const { pathname, search } = window.location
+        target = pathname + (search || '')
+      }
+      const redirectParam = target ? `?redirect=${encodeURIComponent(target)}` : ''
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+          redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback${redirectParam}`,
         },
       })
       return { data, error }
