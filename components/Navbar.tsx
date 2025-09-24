@@ -121,17 +121,17 @@ const Navbar = () => {
 
             {/* User Authentication */}
             <div className="flex items-center space-x-4 border-l border-gray-600 pl-4">
-              {user && profile ? (
+              {user ? (
                 /* User Dropdown */
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                     className="flex items-center space-x-3 text-dark-text hover:text-primary-red transition-colors duration-200"
                   >
-                    {profile.avatar_url ? (
+                    {profile?.avatar_url ? (
                       <Image
                         src={profile.avatar_url}
-                        alt={profile.full_name || profile.username || 'User'}
+                        alt={profile.full_name || profile.username || user.email || 'User'}
                         width={32}
                         height={32}
                         className="rounded-full"
@@ -142,7 +142,7 @@ const Navbar = () => {
                       </div>
                     )}
                     <span className="font-medium">
-                      {profile.full_name || profile.username || 'User'}
+                      {profile?.full_name || profile?.username || user.email || 'User'}
                     </span>
                   </button>
 
@@ -254,13 +254,13 @@ const Navbar = () => {
 
             {/* Mobile User Actions */}
             <div className="pt-4 border-t border-gray-700">
-              {user && profile ? (
+              {user ? (
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3 py-2">
-                    {profile.avatar_url ? (
+                    {profile?.avatar_url ? (
                       <Image
                         src={profile.avatar_url}
-                        alt={profile.full_name || profile.username || 'User'}
+                        alt={profile.full_name || profile.username || user.email || 'User'}
                         width={40}
                         height={40}
                         className="rounded-full"
@@ -272,7 +272,7 @@ const Navbar = () => {
                     )}
                     <div>
                       <p className="text-dark-text font-medium">
-                        {profile.full_name || profile.username || 'User'}
+                        {profile?.full_name || profile?.username || user.email || 'User'}
                       </p>
                       <p className="text-gray-400 text-sm">{user.email}</p>
                     </div>
