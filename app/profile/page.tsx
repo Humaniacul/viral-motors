@@ -43,7 +43,7 @@ const ProfilePage = () => {
       alert('Profile updated successfully!')
     } catch (error) {
       console.error('Error updating profile:', error)
-      alert('Error updating profile: ' + (error as any).message)
+      alert('Error updating profile: ' + (error as Error).message)
     }
   }
 
@@ -58,6 +58,7 @@ const ProfilePage = () => {
       console.log('Avatar upload not implemented yet:', file.name)
     } catch (error) {
       console.error('Error uploading avatar:', error)
+      alert('Error uploading avatar: ' + (error as Error).message)
     } finally {
       setUploadingAvatar(false)
     }
@@ -410,7 +411,7 @@ const ProfilePage = () => {
                     router.push('/admin/articles/new')
                   } catch (err) {
                     console.error('TEST: Router error:', err)
-                    alert('Router error: ' + err.message)
+                    alert('Router error: ' + (err as Error).message)
                   }
                 }}
                 className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
