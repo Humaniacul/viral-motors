@@ -383,28 +383,50 @@ const ProfilePage = () => {
 
           </div>
 
-          {/* Admin Actions */}
-          {profile?.role === 'admin' && (
-            <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
-              <h2 className="text-2xl font-bold text-dark-text mb-6">Admin Actions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button
-                  onClick={() => router.push('/admin/articles/new')}
-                  className="inline-flex items-center justify-center bg-primary-red hover:bg-primary-red-light text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
-                >
-                  <FileText size={18} className="mr-2" />
-                  Create Article
-                </button>
-                <button
-                  onClick={() => router.push('/admin')}
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-gray-600 text-dark-text hover:bg-gray-800"
-                >
-                  <Settings size={18} className="mr-2" />
-                  Admin Dashboard
-                </button>
-              </div>
+          {/* Admin Actions - Always show for testing */}
+          <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
+            <h2 className="text-2xl font-bold text-dark-text mb-6">Admin Actions (Testing)</h2>
+            <div className="mb-4 text-gray-300 text-sm">
+              Profile Role: {profile?.role || 'undefined'}
             </div>
-          )}
+            <div className="space-y-4">
+              <button
+                onClick={() => {
+                  console.log('Create Article button clicked')
+                  console.log('Router:', router)
+                  alert('Navigating to /admin/articles/new')
+                  router.push('/admin/articles/new')
+                }}
+                className="w-full bg-primary-red hover:bg-red-600 text-white px-6 py-4 rounded-lg font-medium transition-all duration-200 text-center"
+                style={{ display: 'block', cursor: 'pointer' }}
+              >
+                📝 Create Article (Test)
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Admin Dashboard button clicked')
+                  console.log('Router:', router)
+                  alert('Navigating to /admin')
+                  router.push('/admin')
+                }}
+                className="w-full border-2 border-gray-600 text-dark-text hover:bg-gray-800 px-6 py-4 rounded-lg font-medium transition-all duration-200 text-center"
+                style={{ display: 'block', cursor: 'pointer' }}
+              >
+                ⚙️ Admin Dashboard (Test)
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Edit Profile button clicked')
+                  setEditing(!editing)
+                  alert(`Edit mode: ${!editing}`)
+                }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-medium transition-all duration-200 text-center"
+                style={{ display: 'block', cursor: 'pointer' }}
+              >
+                ✏️ Toggle Edit Profile (Test)
+              </button>
+            </div>
+          </div>
 
           {/* Debug Info */}
           {process.env.NODE_ENV === 'development' && (
