@@ -177,6 +177,7 @@ export default function HomePage() {
   })
   
   console.log('🔹 Transformed articles:', transformedArticles)
+  console.log('🔹 First transformed article:', transformedArticles[0])
 
   // Divide articles into sections
   const trendingArticles = transformedArticles.filter(article => article.isTrending).slice(0, 3)
@@ -200,8 +201,15 @@ export default function HomePage() {
       {/* Debug Section - Remove this later */}
       <div className="bg-red-900 text-white p-4 text-center">
         <p>🔍 DEBUG: Articles loaded: {articles.length} | Transformed: {transformedArticles.length}</p>
+        <p>📊 Trending: {trendingArticles.length} | Latest: {latestArticles.length} | Reviews: {reviewArticles.length}</p>
         {transformedArticles.length === 0 && (
           <p>❌ No articles found! Check console logs (Cmd+Option+I → Console)</p>
+        )}
+        {transformedArticles.length > 0 && (
+          <div className="mt-4">
+            <p>✅ Articles found! First article: {transformedArticles[0]?.title}</p>
+            <p>🎯 Should show {latestArticles.length} articles in Latest section</p>
+          </div>
         )}
       </div>
       
@@ -212,14 +220,17 @@ export default function HomePage() {
         viewAllLink="/trending"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(trendingArticles.length > 0 ? trendingArticles : latestArticles.slice(0, 3)).map((article) => (
-            <ArticleCard
-              key={article.id}
-              article={article}
-              layout="vertical"
-              showStats={true}
-            />
-          ))}
+          {(trendingArticles.length > 0 ? trendingArticles : latestArticles.slice(0, 3)).map((article, index) => {
+            console.log(`🔹 Rendering article ${index}:`, article.title, article)
+            return (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                layout="vertical"
+                showStats={true}
+              />
+            )
+          })}
         </div>
       </TrendingSection>
 
@@ -234,15 +245,18 @@ export default function HomePage() {
         layout="default"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {latestArticles.map((article, index) => (
-            <ArticleCard
-              key={article.id}
-              article={article}
-              layout={index === 0 ? "large" : "vertical"}
-              showStats={true}
-              className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
-            />
-          ))}
+          {latestArticles.map((article, index) => {
+            console.log(`🔹 Rendering latest article ${index}:`, article.title)
+            return (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                layout={index === 0 ? "large" : "vertical"}
+                showStats={true}
+                className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
+              />
+            )
+          })}
         </div>
       </LatestSection>
 
