@@ -2,136 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
-import Hero from '../components/Hero'
+// import Hero from '../components/Hero'
 import ArticleCard from '../components/ArticleCard'
 import SectionBlock, { TrendingSection, LatestSection, FeaturedSection } from '../components/SectionBlock'
-import ViralSection from '../components/ViralSection'
+// import ViralSection from '../components/ViralSection'
 import VideoBlock from '../components/VideoBlock'
 import Footer from '../components/Footer'
 import { getArticles } from '../lib/supabase'
 
-// Sample data - replace with real data from CMS/API
-const sampleArticles = [
-  {
-    id: '1',
-    title: 'Tesla Model S Plaid Sets New Nürburgring Record',
-    excerpt: 'The electric sedan dominates the legendary German track with unprecedented performance metrics that redefine what we thought possible.',
-    image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&h=600&fit=crop',
-    author: 'Alex Rodriguez',
-    publishedAt: '2024-01-15',
-    category: 'Breaking News',
-    readTime: '5 min',
-    views: 2500000,
-    likes: 45000,
-    slug: 'tesla-model-s-plaid-nurburgring-record',
-    isTrending: true
-  },
-  {
-    id: '2',
-    title: 'Ferrari Unveils Revolutionary Hybrid Engine Technology',
-    excerpt: 'The Italian automaker reveals groundbreaking powertrain technology that promises to redefine supercar performance for the next decade.',
-    image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&h=600&fit=crop',
-    author: 'Maria Santos',
-    publishedAt: '2024-01-14',
-    category: 'Technology',
-    readTime: '8 min',
-    views: 1800000,
-    likes: 32000,
-    slug: 'ferrari-hybrid-engine-technology'
-  },
-  {
-    id: '3',
-    title: 'Porsche 911 GT3 RS: Track-Focused Excellence Redefined',
-    excerpt: 'Our comprehensive review of Porsche\'s most extreme street-legal sports car reveals why it\'s the ultimate driver\'s machine.',
-    image: 'https://images.unsplash.com/photo-1611566026373-c6c8da0ea861?w=800&h=600&fit=crop',
-    author: 'James Wilson',
-    publishedAt: '2024-01-13',
-    category: 'Reviews',
-    readTime: '12 min',
-    views: 950000,
-    likes: 28000,
-    slug: 'porsche-911-gt3-rs-review'
-  },
-  {
-    id: '4',
-    title: 'Electric Vehicle Sales Surge 300% in Q4 2023',
-    excerpt: 'Market analysis reveals unprecedented growth in electric vehicle adoption across all segments and price ranges.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
-    author: 'Sarah Chen',
-    publishedAt: '2024-01-12',
-    category: 'Market Analysis',
-    readTime: '6 min',
-    views: 1200000,
-    likes: 18000,
-    slug: 'ev-sales-surge-q4-2023'
-  },
-  {
-    id: '5',
-    title: 'McLaren 765LT Spider: Open-Top Savage',
-    excerpt: 'We take McLaren\'s most hardcore convertible supercar to its limits on track and street to see if it lives up to the hype.',
-    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop',
-    author: 'Mike Thompson',
-    publishedAt: '2024-01-11',
-    category: 'Reviews',
-    readTime: '10 min',
-    views: 720000,
-    likes: 22000,
-    slug: 'mclaren-765lt-spider-review'
-  },
-  {
-    id: '6',
-    title: 'Bugatti Chiron Successor Spotted Testing',
-    excerpt: 'Spy photographers capture the next-generation Bugatti hypercar during testing, revealing aggressive new aerodynamics.',
-    image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800&h=600&fit=crop',
-    author: 'David Kim',
-    publishedAt: '2024-01-10',
-    category: 'Spy Shots',
-    readTime: '4 min',
-    views: 3100000,
-    likes: 67000,
-    slug: 'bugatti-chiron-successor-spy-shots',
-    isTrending: true
-  },
-  {
-    id: '7',
-    title: 'BMW M4 CSL: The Ultimate Driving Machine Returns',
-    excerpt: 'BMW\'s most track-focused M4 variant strips away luxury for pure performance, delivering an experience that purists will love.',
-    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop',
-    author: 'Chris Anderson',
-    publishedAt: '2024-01-09',
-    category: 'Reviews',
-    readTime: '9 min',
-    views: 850000,
-    likes: 31000,
-    slug: 'bmw-m4-csl-review'
-  },
-  {
-    id: '8',
-    title: 'Autonomous Driving: Where We Stand in 2024',
-    excerpt: 'A comprehensive look at the current state of self-driving technology and what to expect in the coming years.',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
-    author: 'Lisa Park',
-    publishedAt: '2024-01-08',
-    category: 'Technology',
-    readTime: '15 min',
-    views: 1400000,
-    likes: 24000,
-    slug: 'autonomous-driving-2024-update'
-  },
-  {
-    id: '9',
-    title: 'Restored 1970 Plymouth Barracuda: Pure American Muscle',
-    excerpt: 'This frame-off restoration of a classic Plymouth Barracuda showcases the golden age of American muscle cars.',
-    image: 'https://images.unsplash.com/photo-1494905998402-395d579af36f?w=800&h=600&fit=crop',
-    author: 'Tony Rodriguez',
-    publishedAt: '2024-01-07',
-    category: 'Classics',
-    readTime: '7 min',
-    views: 680000,
-    likes: 35000,
-    slug: 'plymouth-barracuda-restoration'
-  }
-]
+// Removed sampleArticles – homepage now renders only real articles
 
 export default function HomePage() {
   const [articles, setArticles] = useState<any[]>([])
@@ -195,47 +74,31 @@ export default function HomePage() {
       {/* Navigation */}
       <Navbar />
 
-      {/* Hero Section */}
-      <Hero />
+      {/* Hero Section disabled to highlight real content */}
+      <></>
       
-      {/* Debug Section - Remove this later */}
-      <div className="bg-red-900 text-white p-4 text-center">
-        <p>🔍 DEBUG: Articles loaded: {articles.length} | Transformed: {transformedArticles.length}</p>
-        <p>📊 Trending: {trendingArticles.length} | Latest: {latestArticles.length} | Reviews: {reviewArticles.length}</p>
-        {transformedArticles.length === 0 && (
-          <p>❌ No articles found! Check console logs (Cmd+Option+I → Console)</p>
-        )}
-        {transformedArticles.length > 0 && (
-          <div className="mt-4">
-            <p>✅ Articles found! First article: {transformedArticles[0]?.title}</p>
-            <p>🎯 Should show {latestArticles.length} articles in Latest section</p>
-          </div>
-        )}
-      </div>
+      {/* Debug Section removed */}
       
       {/* Trending Section */}
       <TrendingSection
         title="Trending Now"
         subtitle="The hottest automotive stories capturing everyone's attention"
-        viewAllLink="/trending"
+        viewAllLink="/news"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(trendingArticles.length > 0 ? trendingArticles : latestArticles.slice(0, 3)).map((article, index) => {
-            console.log(`🔹 Rendering article ${index}:`, article.title, article)
-            return (
-              <div key={article.id} className="bg-red-500 text-white p-4 m-2">
-                <h3>TEST: {article.title}</h3>
-                <p>{article.excerpt}</p>
-                <p>Author: {article.author}</p>
-                <p>Category: {article.category}</p>
-              </div>
-            )
-          })}
+          {(trendingArticles.length > 0 ? trendingArticles : latestArticles.slice(0, 3)).map((article) => (
+            <ArticleCard
+              key={article.id}
+              article={article}
+              layout="vertical"
+              showStats={true}
+            />
+          ))}
         </div>
       </TrendingSection>
 
-      {/* Viral Section */}
-      <ViralSection />
+      {/* Viral Section disabled */}
+      <></>
 
       {/* Latest News Grid */}
       <LatestSection
@@ -245,17 +108,15 @@ export default function HomePage() {
         layout="default"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {latestArticles.map((article, index) => {
-            console.log(`🔹 Rendering latest article ${index}:`, article.title)
-            return (
-              <div key={article.id} className="bg-blue-500 text-white p-4 m-2">
-                <h3>LATEST: {article.title}</h3>
-                <p>{article.excerpt}</p>
-                <p>Author: {article.author}</p>
-                <p>Category: {article.category}</p>
-              </div>
-            )
-          })}
+          {latestArticles.map((article, index) => (
+            <ArticleCard
+              key={article.id}
+              article={article}
+              layout={index === 0 ? "large" : "vertical"}
+              showStats={true}
+              className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
+            />
+          ))}
         </div>
       </LatestSection>
 
@@ -295,24 +156,7 @@ export default function HomePage() {
         </div>
       </FeaturedSection>
 
-      {/* More Latest Articles */}
-      <SectionBlock
-        title="More Stories"
-        subtitle="Don't miss these other great automotive stories"
-        viewAllLink="/all"
-        layout="minimal"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {sampleArticles.slice(6).map((article) => (
-            <ArticleCard
-              key={article.id}
-              article={article}
-              layout="minimal"
-              showStats={false}
-            />
-          ))}
-        </div>
-      </SectionBlock>
+      {/* More Latest Articles removed (was using sample data) */}
 
       {/* Footer */}
       <Footer />
