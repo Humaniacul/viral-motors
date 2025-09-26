@@ -146,6 +146,7 @@ export default function HomePage() {
           status: 'published'
         })
         console.log('🔹 Articles loaded:', allArticles)
+        console.log('🔹 First article structure:', allArticles[0])
         setArticles(allArticles)
       } catch (error) {
         console.error('❌ Failed to load articles:', error)
@@ -156,26 +157,35 @@ export default function HomePage() {
   }, [])
   
   // Transform database articles to match component interface
-  const transformedArticles = articles.map(article => ({
-    id: article.id,
-    title: article.title,
-    excerpt: article.excerpt || '',
-    image: article.image_url || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&h=600&fit=crop',
-    author: article.profiles?.full_name || article.profiles?.username || 'Viral Motors',
-    publishedAt: article.published_at || article.created_at,
-    category: article.category,
-    readTime: `${article.reading_time} min`,
-    views: article.view_count,
-    likes: article.like_count,
-    slug: article.slug,
-    isSponsored: false,
-    isTrending: article.featured || article.viral_score > 90
-  }))
+  const transformedArticles = articles.map(article => {
+    console.log('🔹 Transforming article:', article.title, 'Structure:', article)
+    return {
+      id: article.id,
+      title: article.title,
+      excerpt: article.excerpt || '',
+      image: article.image_url || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&h=600&fit=crop',
+      author: article.profiles?.full_name || article.profiles?.username || 'Viral Motors',
+      publishedAt: article.published_at || article.created_at,
+      category: article.category,
+      readTime: `${article.reading_time} min`,
+      views: article.view_count,
+      likes: article.like_count,
+      slug: article.slug,
+      isSponsored: false,
+      isTrending: article.featured || article.viral_score > 90
+    }
+  })
+  
+  console.log('🔹 Transformed articles:', transformedArticles)
 
   // Divide articles into sections
   const trendingArticles = transformedArticles.filter(article => article.isTrending).slice(0, 3)
   const latestArticles = transformedArticles.slice(0, 6)
   const reviewArticles = transformedArticles.filter(article => article.category === 'Reviews').slice(0, 3)
+  
+  console.log('🔹 Trending articles:', trendingArticles.length)
+  console.log('🔹 Latest articles:', latestArticles.length)
+  console.log('🔹 Review articles:', reviewArticles.length)
   
   // Show only real articles from database
   const hasArticles = transformedArticles.length > 0
@@ -202,7 +212,7 @@ export default function HomePage() {
         viewAllLink="/trending"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {trendingArticles.map((article) => (
+          {(trendingArticles.length > 0 ? trendingArticles : latestArticles.slice(0, 3)).map((article) => (
             <ArticleCard
               key={article.id}
               article={article}
