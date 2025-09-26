@@ -24,18 +24,24 @@ export default function AdminPage() {
 
   const loadRecentArticles = async () => {
     try {
+      console.log('🔹 Loading recent articles from admin...')
       const { data, error } = await supabase
         .from('articles')
-        .select('id, title, slug, category, created_at, status')
+        .select('id, title, slug, category, created_at, status, author_id')
         .order('created_at', { ascending: false })
-        .limit(5)
+        .limit(10)
 
-      console.log('🔹 Recent articles:', { data, error })
+      console.log('🔹 Recent articles response:', { data, error })
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Database error:', error)
+        throw error
+      }
+      
       setRecentArticles(data || [])
+      console.log('🔹 Articles set in state:', data?.length || 0)
     } catch (error) {
-      console.error('Error loading recent articles:', error)
+      console.error('❌ Error loading recent articles:', error)
     } finally {
       setLoading(false)
     }

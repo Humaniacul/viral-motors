@@ -177,7 +177,7 @@ export default function HomePage() {
   const latestArticles = transformedArticles.slice(0, 6)
   const reviewArticles = transformedArticles.filter(article => article.category === 'Reviews').slice(0, 3)
   
-  // Fallback to sample data if no articles exist
+  // Show only real articles from database
   const hasArticles = transformedArticles.length > 0
   return (
     <div className="min-h-screen">
@@ -187,6 +187,14 @@ export default function HomePage() {
       {/* Hero Section */}
       <Hero />
       
+      {/* Debug Section - Remove this later */}
+      <div className="bg-red-900 text-white p-4 text-center">
+        <p>🔍 DEBUG: Articles loaded: {articles.length} | Transformed: {transformedArticles.length}</p>
+        {transformedArticles.length === 0 && (
+          <p>❌ No articles found! Check console logs (Cmd+Option+I → Console)</p>
+        )}
+      </div>
+      
       {/* Trending Section */}
       <TrendingSection
         title="Trending Now"
@@ -194,7 +202,7 @@ export default function HomePage() {
         viewAllLink="/trending"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(hasArticles ? trendingArticles : sampleArticles.filter(article => article.isTrending).slice(0, 3)).map((article) => (
+          {trendingArticles.map((article) => (
             <ArticleCard
               key={article.id}
               article={article}
@@ -216,7 +224,7 @@ export default function HomePage() {
         layout="default"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(hasArticles ? latestArticles : sampleArticles.slice(0, 6)).map((article, index) => (
+          {latestArticles.map((article, index) => (
             <ArticleCard
               key={article.id}
               article={article}
@@ -241,16 +249,18 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Main Featured Review */}
           <div className="lg:row-span-2">
-            <ArticleCard
-              article={(hasArticles ? reviewArticles : sampleArticles.filter(article => article.category === 'Reviews').slice(0, 3))[0]}
-              layout="large"
-              showStats={true}
-            />
+            {reviewArticles[0] && (
+              <ArticleCard
+                article={reviewArticles[0]}
+                layout="large"
+                showStats={true}
+              />
+            )}
           </div>
           
           {/* Side Reviews */}
           <div className="space-y-6">
-            {(hasArticles ? reviewArticles : sampleArticles.filter(article => article.category === 'Reviews').slice(0, 3)).slice(1).map((article) => (
+            {reviewArticles.slice(1).map((article) => (
               <ArticleCard
                 key={article.id}
                 article={article}
