@@ -36,7 +36,28 @@ const ArticleCard = ({
 }: ArticleCardProps) => {
   console.log('🔹 ArticleCard rendering:', article.title, 'Layout:', layout)
   
-  const { user, profile } = useAuth()
+  // Make auth optional for public viewing
+  let user = null
+  let profile = null
+  try {
+    const auth = useAuth()
+    user = auth.user
+    profile = auth.profile
+  } catch (error) {
+    // No auth context - this is fine for public viewing
+    console.log('🔹 ArticleCard: No auth context, rendering in public mode')
+  }
+
+  // Safety check - if article is missing required fields, render a fallback
+  if (!article || !article.title) {
+    console.error('🔹 ArticleCard: Missing required article data:', article)
+    return (
+      <div className="bg-gray-800 p-4 rounded-lg">
+        <p className="text-white">Article data missing</p>
+      </div>
+    )
+  }
+  
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
   const [likes, setLikes] = useState(article.likes)
@@ -113,7 +134,7 @@ const ArticleCard = ({
   // Vertical Layout (Default)
   if (layout === 'vertical') {
     return (
-      <article className={`card group cursor-pointer ${className}`}>
+      <article className={`bg-dark-card rounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group cursor-pointer ${className}`}>
         <Link href={`/articles/${article.slug}`}>
           {/* Image Container */}
           <div className="relative h-48 overflow-hidden">
@@ -231,7 +252,7 @@ const ArticleCard = ({
   // Horizontal Layout
   if (layout === 'horizontal') {
     return (
-      <article className={`card group cursor-pointer ${className}`}>
+      <article className={`bg-dark-card rounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group cursor-pointer ${className}`}>
         <Link href={`/articles/${article.slug}`} className="flex">
           {/* Image */}
           <div className="relative w-1/3 h-32 overflow-hidden flex-shrink-0">
@@ -276,7 +297,7 @@ const ArticleCard = ({
   // Large Layout (Featured)
   if (layout === 'large') {
     return (
-      <article className={`card group cursor-pointer ${className}`}>
+      <article className={`bg-dark-card rounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 group cursor-pointer ${className}`}>
         <Link href={`/articles/${article.slug}`}>
           {/* Large Image */}
           <div className="relative h-64 md:h-80 overflow-hidden">

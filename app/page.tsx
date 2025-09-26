@@ -79,6 +79,15 @@ export default function HomePage() {
       
       {/* Debug Section removed */}
       
+      {/* Simple Test Section */}
+      <div className="bg-green-500 text-white p-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">✅ HOMEPAGE IS WORKING</h2>
+        <p>Articles loaded: {articles.length}</p>
+        <p>Transformed: {transformedArticles.length}</p>
+        <p>Trending: {trendingArticles.length}</p>
+        <p>Latest: {latestArticles.length}</p>
+      </div>
+      
       {/* Trending Section */}
       <TrendingSection
         title="Trending Now"
