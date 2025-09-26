@@ -140,13 +140,15 @@ export default function HomePage() {
     // Load real articles from database
     const loadArticles = async () => {
       try {
+        console.log('🔹 Loading published articles from database...')
         const allArticles = await getArticles({
           limit: 20,
           status: 'published'
         })
+        console.log('🔹 Articles loaded:', allArticles)
         setArticles(allArticles)
       } catch (error) {
-        console.log('Failed to load articles:', error)
+        console.error('❌ Failed to load articles:', error)
       }
     }
 

@@ -145,8 +145,11 @@ export const getArticles = async (options?: {
       bookmarks (id, user_id)
     `)
   
+  // Default to published articles only for public access
   if (options?.status !== undefined) {
     query = query.eq('status', options.status)
+  } else {
+    query = query.eq('status', 'published')
   }
   
   if (options?.category) {
