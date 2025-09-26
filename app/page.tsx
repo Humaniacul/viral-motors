@@ -1,6 +1,4 @@
-'use client'
-
-import { useEffect, useState } from 'react'
+// Server component: fetch articles server-side for reliability
 import Navbar from '../components/Navbar'
 // import Hero from '../components/Hero'
 import ArticleCard from '../components/ArticleCard'
@@ -12,33 +10,17 @@ import { getArticles } from '../lib/supabase'
 
 // Removed sampleArticles – homepage now renders only real articles
 
-export default function HomePage() {
-  const [articles, setArticles] = useState<any[]>([])
-
-  useEffect(() => {
-    // Load real articles from database
-    const loadArticles = async () => {
-      try {
-        console.log('🔹 Loading published articles from database...')
-        const allArticles = await getArticles({
-          limit: 20,
-          status: 'published'
-        })
-        console.log('🔹 Articles loaded:', allArticles)
-        console.log('🔹 First article structure:', allArticles[0])
-        setArticles(allArticles)
-      } catch (error) {
-        console.error('❌ Failed to load articles:', error)
-      }
-    }
-
-    loadArticles()
-  }, [])
+export default async function HomePage() {
+  // Fetch articles on the server for consistency
+  let articles: any[] = []
+  try {
+    articles = await getArticles({ limit: 20, status: 'published' })
+  } catch (error) {
+    // Swallow to avoid breaking the page
+  }
   
   // Transform database articles to match component interface
-  const transformedArticles = articles.map(article => {
-    console.log('🔹 Transforming article:', article.title, 'Structure:', article)
-    return {
+  const transformedArticles = articles.map(article => ({
       id: article.id,
       title: article.title,
       excerpt: article.excerpt || '',
@@ -52,20 +34,12 @@ export default function HomePage() {
       slug: article.slug,
       isSponsored: false,
       isTrending: article.featured || article.viral_score > 90
-    }
-  })
-  
-  console.log('🔹 Transformed articles:', transformedArticles)
-  console.log('🔹 First transformed article:', transformedArticles[0])
+  }))
 
   // Divide articles into sections
   const trendingArticles = transformedArticles.filter(article => article.isTrending).slice(0, 3)
   const latestArticles = transformedArticles.slice(0, 6)
   const reviewArticles = transformedArticles.filter(article => article.category === 'Reviews').slice(0, 3)
-  
-  console.log('🔹 Trending articles:', trendingArticles.length)
-  console.log('🔹 Latest articles:', latestArticles.length)
-  console.log('🔹 Review articles:', reviewArticles.length)
   
   // Show only real articles from database
   const hasArticles = transformedArticles.length > 0
@@ -77,16 +51,7 @@ export default function HomePage() {
       {/* Hero Section disabled to highlight real content */}
       <></>
       
-      {/* Debug Section removed */}
-      
-      {/* Simple Test Section */}
-      <div className="bg-green-500 text-white p-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">✅ HOMEPAGE IS WORKING</h2>
-        <p>Articles loaded: {articles.length}</p>
-        <p>Transformed: {transformedArticles.length}</p>
-        <p>Trending: {trendingArticles.length}</p>
-        <p>Latest: {latestArticles.length}</p>
-      </div>
+      {/* Debug/UI removed */}
       
       {/* Trending Section */}
       <TrendingSection
