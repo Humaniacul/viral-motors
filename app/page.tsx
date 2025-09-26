@@ -223,12 +223,12 @@ export default function HomePage() {
           {(trendingArticles.length > 0 ? trendingArticles : latestArticles.slice(0, 3)).map((article, index) => {
             console.log(`🔹 Rendering article ${index}:`, article.title, article)
             return (
-              <ArticleCard
-                key={article.id}
-                article={article}
-                layout="vertical"
-                showStats={true}
-              />
+              <div key={article.id} className="bg-red-500 text-white p-4 m-2">
+                <h3>TEST: {article.title}</h3>
+                <p>{article.excerpt}</p>
+                <p>Author: {article.author}</p>
+                <p>Category: {article.category}</p>
+              </div>
             )
           })}
         </div>
@@ -248,13 +248,12 @@ export default function HomePage() {
           {latestArticles.map((article, index) => {
             console.log(`🔹 Rendering latest article ${index}:`, article.title)
             return (
-              <ArticleCard
-                key={article.id}
-                article={article}
-                layout={index === 0 ? "large" : "vertical"}
-                showStats={true}
-                className={index === 0 ? "md:col-span-2 lg:col-span-2" : ""}
-              />
+              <div key={article.id} className="bg-blue-500 text-white p-4 m-2">
+                <h3>LATEST: {article.title}</h3>
+                <p>{article.excerpt}</p>
+                <p>Author: {article.author}</p>
+                <p>Category: {article.category}</p>
+              </div>
             )
           })}
         </div>

@@ -34,6 +34,8 @@ const ArticleCard = ({
   showStats = true, 
   className = '' 
 }: ArticleCardProps) => {
+  console.log('🔹 ArticleCard rendering:', article.title, 'Layout:', layout)
+  
   const { user, profile } = useAuth()
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
@@ -351,6 +353,17 @@ const ArticleCard = ({
         </div>
       </Link>
     </article>
+  )
+}
+
+// Add a simple test component to see if it renders
+const TestArticleCard = ({ article }: { article: any }) => {
+  console.log('🔹 TestArticleCard rendering:', article.title)
+  return (
+    <div className="bg-red-500 text-white p-4 m-2">
+      <h3>TEST: {article.title}</h3>
+      <p>{article.excerpt}</p>
+    </div>
   )
 }
 
