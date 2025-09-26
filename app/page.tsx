@@ -134,19 +134,9 @@ const sampleArticles = [
 ]
 
 export default function HomePage() {
-  const [blocked, setBlocked] = useState<string | null>(null)
-  const [blockedPath, setBlockedPath] = useState<string | null>(null)
   const [articles, setArticles] = useState<any[]>([])
 
   useEffect(() => {
-    // Check for blocked access
-    const url = new URL(window.location.href)
-    const blockedParam = url.searchParams.get('blocked')
-    const blockedPathParam = url.searchParams.get('path')
-
-    setBlocked(blockedParam)
-    setBlockedPath(blockedPathParam)
-
     // Load real articles from database
     const loadArticles = async () => {
       try {
@@ -191,15 +181,6 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Navigation */}
       <Navbar />
-
-      {/* Debug Banner for Blocked Access */}
-      {blocked && (
-        <div className="bg-red-600 text-white px-4 py-2 text-center">
-          🚫 ACCESS BLOCKED: You tried to access <strong>{blockedPath}</strong> but were redirected here.
-          This usually means your profile role is not set to 'admin' or your profile is not loaded correctly.
-          Check the browser console for detailed logs.
-        </div>
-      )}
 
       {/* Hero Section */}
       <Hero />

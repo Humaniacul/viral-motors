@@ -384,83 +384,19 @@ const ProfilePage = () => {
 
           </div>
 
-          {/* Admin Actions - Always show for testing */}
+          {/* Admin Panel Link - Simple */}
           <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
-            <h2 className="text-2xl font-bold text-white mb-6">Admin Actions (Testing)</h2>
+            <h2 className="text-2xl font-bold text-dark-text mb-6">Admin Panel</h2>
             <div className="mb-4 text-gray-300 text-sm">
-              Profile Role: {profile?.role || 'undefined'} | User ID: {user?.id || 'none'}
+              Your Role: {profile?.role || 'No role set'}
             </div>
-            <div className="space-y-4">
-              <button
-                onClick={() => {
-                  console.log('TEST: Create Article button clicked')
-                  console.log('TEST: Router exists:', !!router)
-                  console.log('TEST: Router object:', router)
-                  console.log('TEST: Current URL:', window.location.href)
-                  alert('TEST: Button clicked! Check console for logs.')
-                }}
-                className="w-full bg-red-500 hover:bg-red-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
-                style={{ display: 'block !important', cursor: 'pointer !important' }}
-              >
-                🔴 TEST BUTTON - Click Me First!
-              </button>
-              <button
-                onClick={() => {
-                  console.log('🟢 Create Article clicked!')
-                  console.log('🟢 Router exists:', !!router)
-                  console.log('🟢 Current URL:', window.location.href)
-
-                  try {
-                    alert('🟢 Navigating to Create Article page...')
-                    router.push('/admin/articles/new?bypass=admin')
-                    console.log('🟢 Router push successful with bypass')
-                  } catch (err) {
-                    console.error('🟢 Router error:', err)
-                    alert('🟢 Router error: ' + (err as Error).message)
-                    // Fallback navigation
-                    window.location.href = '/admin/articles/new?bypass=admin'
-                  }
-                }}
-                className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
-                style={{ display: 'block !important', cursor: 'pointer !important', zIndex: 999 }}
-              >
-                🟢 Create Article (Real) - Click Me!
-              </button>
-              <button
-                onClick={() => {
-                  console.log('🔵 Edit Profile clicked!')
-                  console.log('🔵 Current editing state:', editing)
-
-                  try {
-                    const newEditingState = !editing
-                    setEditing(newEditingState)
-                    alert('🔵 Edit mode: ' + (newEditingState ? 'ON' : 'OFF'))
-                    console.log('🔵 Edit mode set to:', newEditingState)
-                  } catch (err) {
-                    console.error('🔵 Edit toggle error:', err)
-                    alert('🔵 Error toggling edit mode: ' + (err as Error).message)
-                  }
-                }}
-                className="w-full bg-blue-500 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-bold text-center cursor-pointer"
-                style={{ display: 'block !important', cursor: 'pointer !important', zIndex: 999 }}
-              >
-                🔵 Toggle Edit Profile - Click Me!
-              </button>
-            </div>
+            <button
+              onClick={() => router.push('/admin')}
+              className="w-full bg-primary-red hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              📝 Go to Admin Panel
+            </button>
           </div>
-
-          {/* Debug Info */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="bg-dark-card rounded-2xl p-8 mb-8 shadow-card">
-              <h2 className="text-xl font-bold text-dark-text mb-4">Debug Info</h2>
-              <div className="text-gray-300 text-sm space-y-2">
-                <p>User ID: {user?.id}</p>
-                <p>Profile Role: {profile?.role || 'No role'}</p>
-                <p>Profile Loaded: {profile ? 'Yes' : 'No'}</p>
-                <p>Is Admin: {profile?.role === 'admin' ? 'Yes' : 'No'}</p>
-              </div>
-            </div>
-          )}
 
           {/* Recent Activity Placeholder */}
           <div className="bg-dark-card rounded-2xl p-8 shadow-card">
