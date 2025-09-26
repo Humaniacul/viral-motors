@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
@@ -15,6 +15,31 @@ export default function AdminPage() {
   const [category, setCategory] = useState('News')
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const [recentArticles, setRecentArticles] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadRecentArticles()
+  }, [])
+
+  const loadRecentArticles = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('articles')
+        .select('id, title, slug, category, created_at, status')
+        .order('created_at', { ascending: false })
+        .limit(5)
+
+      console.log('🔹 Recent articles:', { data, error })
+
+      if (error) throw error
+      setRecentArticles(data || [])
+    } catch (error) {
+      console.error('Error loading recent articles:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const createSlug = (title: string) => {
     return title
@@ -36,30 +61,53 @@ export default function AdminPage() {
     try {
       const slug = createSlug(title)
       
+      console.log('🔹 Creating article with data:', {
+        title: title.trim(),
+        slug,
+        content: content.trim(),
+        category,
+        author_id: user.id,
+        status: 'published',
+        published_at: new Date().toISOString(),
+        reading_time: Math.ceil(content.split(' ').length / 200)
+      })
+
       const { data, error } = await supabase
         .from('articles')
         .insert({
           title: title.trim(),
           slug,
           content: content.trim(),
+          excerpt: content.trim().substring(0, 150) + '...',
           category,
           author_id: user.id,
           status: 'published',
           published_at: new Date().toISOString(),
-          reading_time: Math.ceil(content.split(' ').length / 200)
+          reading_time: Math.ceil(content.split(' ').length / 200),
+          view_count: 0,
+          like_count: 0,
+          comment_count: 0,
+          viral_score: 0,
+          featured: false,
+          tags: []
         })
         .select()
         .single()
 
+      console.log('🔹 Supabase response:', { data, error })
+
       if (error) throw error
 
-      setMessage('✅ Article created successfully!')
+      setMessage(`✅ Article created successfully! ID: ${data.id}`)
       setTitle('')
       setContent('')
       
+      // Reload recent articles to show the new one
+      loadRecentArticles()
+
       setTimeout(() => {
-        alert('Article created! Check the homepage.')
-      }, 1000)
+        alert(`Article created with ID: ${data.id}! Check the homepage and news page.`)
+      }, 1500)
 
     } catch (error: any) {
       console.error('Error creating article:', error)
@@ -156,11 +204,41 @@ export default function AdminPage() {
           </div>
 
           <div className="mt-8 bg-dark-card rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Debug Info</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">📚 Recent Articles</h2>
+            {loading ? (
+              <p className="text-gray-400">Loading articles...</p>
+            ) : recentArticles.length === 0 ? (
+              <p className="text-gray-400">No articles found. Create your first article above!</p>
+            ) : (
+              <div className="space-y-4">
+                {recentArticles.map((article) => (
+                  <div key={article.id} className="bg-gray-800 p-4 rounded-lg">
+                    <h3 className="text-white font-semibold">{article.title}</h3>
+                    <div className="text-gray-400 text-sm mt-1">
+                      <span className="bg-primary-red px-2 py-1 rounded text-xs text-white mr-2">
+                        {article.category}
+                      </span>
+                      <span className="bg-green-600 px-2 py-1 rounded text-xs text-white mr-2">
+                        {article.status}
+                      </span>
+                      <span>{new Date(article.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <p className="text-gray-500 text-xs mt-1">
+                      ID: {article.id} | Slug: {article.slug}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-8 bg-dark-card rounded-xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-4">🔧 Debug Info</h2>
             <div className="text-gray-300 space-y-2 text-sm">
               <p>User: {user?.email}</p>
               <p>Profile Role: {profile?.role || 'No role set'}</p>
               <p>User ID: {user?.id}</p>
+              <p>Articles Found: {recentArticles.length}</p>
             </div>
           </div>
         </div>
