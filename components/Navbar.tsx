@@ -151,6 +151,14 @@ const Navbar = () => {
                   {userDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-dark-card border border-gray-600 rounded-lg shadow-xl py-2 z-50">
                       <Link
+                        href="/write"
+                        className="flex items-center px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
+                        onClick={() => setUserDropdownOpen(false)}
+                      >
+                        <Bookmark size={16} className="mr-3" />
+                        Write
+                      </Link>
+                      <Link
                         href="/profile"
                         className="flex items-center px-4 py-3 text-dark-text hover:bg-gray-700 hover:text-primary-red transition-colors duration-200"
                         onClick={() => setUserDropdownOpen(false)}
