@@ -1,9 +1,9 @@
 // Server component: fetch articles server-side for reliability
 import Navbar from '../components/Navbar'
-// import Hero from '../components/Hero'
+import Hero from '../components/Hero'
 import ArticleCard from '../components/ArticleCard'
 import SectionBlock, { TrendingSection, LatestSection, FeaturedSection } from '../components/SectionBlock'
-// import ViralSection from '../components/ViralSection'
+import ViralSection from '../components/ViralSection'
 import VideoBlock from '../components/VideoBlock'
 import Footer from '../components/Footer'
 import { getArticles } from '../lib/supabase'
@@ -48,8 +48,8 @@ export default async function HomePage() {
       {/* Navigation */}
       <Navbar />
 
-      {/* Hero Section disabled to highlight real content */}
-      <></>
+      {/* Hero Section */}
+      <Hero />
       
       {/* Debug/UI removed */}
       
@@ -71,8 +71,8 @@ export default async function HomePage() {
         </div>
       </TrendingSection>
 
-      {/* Viral Section disabled */}
-      <></>
+      {/* Viral Section */}
+      <ViralSection />
 
       {/* Latest News Grid */}
       <LatestSection
